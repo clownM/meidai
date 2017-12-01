@@ -6,19 +6,7 @@ import ajax from './ajax';
 /**
  * 密码登录
  */
-export const passwordLogin =(phone,password) => ajax({
-	url:'/user',
-	data:{
-		action:'login',
-		phone:phone,
-		password:password
-	},
-	dataType:'JSON',
-})
-/**
- * 多用户密码登录
- */
-export const multiUserLogin =(phone,username,password) => ajax({
+export const passwordLogin =(phone,username,password) => ajax({
 	url:'/user',
 	data:{
 		action:'login',
@@ -28,6 +16,40 @@ export const multiUserLogin =(phone,username,password) => ajax({
 	},
 	dataType:'JSON',
 })
+
+/**
+ * 注册用户
+ */
+export const createUser =(phone,username,password) => ajax({
+	url:'/user',
+	data:{
+		action:'create',
+		phone:phone,
+		username:username,
+		password:password
+	},
+	dataType:'JSON',
+})
+
+/**
+ * 获取用户信息
+ */
+export const queryUser =(uuid) => ajax({
+	url:'/user',
+	data:{
+		action:'query',
+		uuid:uuid,
+		phone:'',
+		username:'',
+		gender:'',
+		birthday:'',
+		address:'',
+		orders:''
+	},
+	dataType:'JSON',
+})
+
+
 
 // /**
 //  * 检测帐号是否存在

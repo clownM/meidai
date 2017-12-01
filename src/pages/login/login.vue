@@ -24,7 +24,7 @@
                                     <span class='phone_error'>{{ phone_error }}</span>
                                 </div>
                                 <label class="login_form_userName" v-show="loginUsername">
-                                    <input type="text" value='' placeholder="用户名" class="form-control" v-model='username'>
+                                    <input type="text" value='' placeholder="用户名" class="form-control" v-model='username'@click='inputUsername'>
                                 </label>
                                 <div class="fsw_juerr">
                                     <span class='login_form_userName_error'>{{ username_error }}</span>
@@ -46,13 +46,13 @@
                                 <div class='shejiao' style="text-align:left;">
                                     <a href="#">社交账户登陆</a>
                                 </div>
-                                <div class="fsw_querr">
+                                <div class="fsw_querr" v-if="regNeterr">
                                     <span class="glyphicon glyphicon-remove"></span>
-                                    <div class="fsw_querr_infor"></div>
+                                    <div class="fsw_querr_infor">当前网络错误，请重新连接</div>
                                 </div>
-                                <div class="fsw_success login_success">
+                                <div class="fsw_success login_success" v-if='loginSuccess'>
                                     <span class="glyphicon glyphicon-ok"></span>
-                                    <div class="fsw_success_infor login_success_infor"></div>
+                                    <div class="fsw_success_infor login_success_infor">登录成功</div>
                                 </div>
                             </div>
                         </div>
@@ -62,46 +62,44 @@
                             <div class='selected'>
                                 <label>
                                     <div style='position:relative;overflow: hidden;'>
-                                        <input type="text" placeholder="请输入手机号" class='email_by_phone panduan form-control'/>
+                                        <input type="text" placeholder="请输入手机号" class='email_by_phone panduan form-control' v-model='phone' @click="regInputPhone"/>
                                     </div>
                                 </label>
                                 <div class="fsw_juerr">
-                                    <span class='registration_error'></span>
+                                    <span class='registration_error'>{{ reg_phone_error }}</span>
                                 </div>
-                                <label style='display: none;' class="input_username ">
+                                <label class="input_username " v-show='regUsername'>
                                     <div style='position:relative;overflow: hidden;'>
-                                        <input type="text" placeholder="用户名" class="registration_input_username form-control" />
-                                    </div>
-                                </label>
-                                <label>
-                                    <div style='position:relative;overflow: hidden;'>
-                                        <input type="password" class='password registration_password  form-control' placeholder="请输入密码" />
-                                    </div>
-                                </label>
-                                <label>
-                                    <div style='position:relative;overflow: hidden;'>
-                                        <input type="password" class='password registration_confirm_password  form-control' placeholder="请确认密码" />
+                                        <input type="text" placeholder="请输入用户名" class="registration_input_username form-control" v-model='username' @click="regInputUsername"/>
                                     </div>
                                 </label>
                                 <div class="fsw_juerr">
-                                    <span class="registration_password_error"></span>
+                                    <span class="registration_password_error">{{ reg_username_error }}</span>
                                 </div>
-                                <input class='do_registration' type="submit" name="确定">
-                                <div class='remember'>
-                                    <!-- <input type="checkbox" name="">-->
-                                    <span></span>
-                                    <span></span>
+                                <label>
+                                    <div style='position:relative;overflow: hidden;'>
+                                        <input type="password" class='password registration_password  form-control' placeholder="请输入密码" v-model='regPassword' @click='regInputPassword'/>
+                                    </div>
+                                </label>
+                                <div class="fsw_juerr">
+                                    <span class="registration_password_error">{{ reg_password_error }}</span>
                                 </div>
-                                <div class='shejiao'>
-                                    <a style="display:none">社交账户登陆</a>
+                                <label>
+                                    <div style='position:relative;overflow: hidden;'>
+                                        <input type="password" class='password registration_confirm_password  form-control' placeholder="请确认密码" v-model='confirmPassword' @click="regInputConfirmPassword"/>
+                                    </div>
+                                </label>
+                                <div class="fsw_juerr">
+                                    <span class="registration_password_error">{{ reg_confirm_password_error }}</span>
                                 </div>
-                                <div class="fsw_querr">
+                                <div class='do_registration' @click='register'>注册</div>
+                                <div class="fsw_querr" v-if="regNeterr">
                                     <span class="glyphicon glyphicon-remove"></span>
-                                    <div class="fsw_querr_infor"></div>
+                                    <div class="fsw_querr_infor">当前网络错误，请重新连接</div>
                                 </div>
-                                <div class="fsw_success registration_success">
+                                <div class="fsw_success registration_success" v-if='regSuccess'>
                                     <span class="glyphicon glyphicon-ok"></span>
-                                    <div class="fsw_success_infor registration_success_infor"></div>
+                                    <div class="fsw_success_infor registration_success_infor">注册成功</div>
                                 </div>
                             </div>
                         </div>
@@ -137,22 +135,35 @@
                             </div>
                         </div>
                     </div>
-                    <div id="user_registration">
+                    <div id="user_registration" v-show='showUserReg'>
                         <div class="registration_box1">
-                            <div class="registration_qiehua">
+                            <div class="registration_qiehua" @click="toPrev2">
                                 <i class="registration_qiehua-left">
-                                    <img src="images/icons/prev.png" />
-                                </i>
+								<img src="../../images/icons/prev.png" />
+							</i>
                             </div>
                             <div class="registration_userlist">
-                                <div class="fsw_registration_box1"></div>
+                                <div class="fsw_registration_box1">
+                                    <div class="registration_userlist_info" v-for='(pages,index) in regUsernameList' v-show='showRegPage == index'>
+                                        <div class="registration_danuser_td" v-for='(user,index2) in pages'>
+                                            <div class="registration_danuser_info" @click="">
+                                                <div class="registration_danuser_info_img">
+                                                    <img src="../../images/6.jpg" />
+                                                </div>
+                                                <div class="registration_danuser_info_name">
+                                                    <p> {{user}} </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                                 <p class="registration_user">请确认你的用户名是否存在</p>
-                                <input type="button" value="继续注册" class="registration_btn" />
+                                <div class="registration_btn" @click="continueReg">继续注册</div>
                             </div>
-                            <div class="registration_qiehua" @click="toNext">
+                            <div class="registration_qiehua" @click="toNext2">
                                 <i class="registration_qiehua_right ">
-                                    <img src="images/icons/next.png" />
-                                </i>
+								<img src="../../images/icons/next.png" />
+							</i>
                             </div>
                         </div>
                     </div>
@@ -165,27 +176,44 @@
 
 <script>
     import {mapState, mapMutations} from 'vuex'
-    import {passwordLogin,multiUserLogin} from '../../config/getData' 
+    import {passwordLogin,createUser,queryUser} from '../../config/getData' 
     import ajax from '../../config/ajax'
     export default{
         data(){
             return {
                 loginForm: true, //登录or注册 默认登录
                 registerForm: false,
+
                 loginInfo: null,
+                phonePlaceholder:'请输入手机号',
+                passwordPlaceholder:'请输入密码',
+                usernamePlaceholder:'请输入用户名',
                 phone: null, //电话号码
                 password: null, //密码
                 loginUsername:false, //username input
                 showUserLogin:false, //多用户登录弹出层
-                username: null, //username
+                username: '', //username
                 usernameList: [],//用户名列表
                 showPage: 0,
                 phone_error:null,   //手机号错误信息
                 password_error:null,    //密码错误信息
                 username_error:null, //用户名错误信息
-                phonePlaceholder:'请输入手机号',
-                passwordPlaceholder:'请输入密码',
-                usernamePlaceholder:'请输入用户名',
+                loginSuccess:false,
+                loginNeterr:false,
+
+                registerInfo:null, //注册信息
+                regPassword:null,//注册密码
+                confirmPassword:null,//确认密码
+                regUsername:false,//注册username显示
+                showUserReg:false,//注册多用户弹出层
+                regUsernameList: [],//用户名列表
+                showRegPage:0,
+                reg_phone_error:null, 
+                reg_username_error:null,
+                reg_password_error:null,
+                reg_confirm_password_error:null,
+                regSuccess:false,
+                regNeterr:false
             }
         },
         created(){
@@ -205,27 +233,60 @@
                     usernameList[i] = usernameList[i].replace(/[\[\]]/g, "").trim();
                 }
                 return usernameList;
+            },
+            getRegUsernameList:function(){
+                let usernameList = [];
+                usernameList = this.registerInfo.reasons.match( /\[[\s\w]+\]/g );
+                for(let i=0;i<usernameList.length;i++){
+                    usernameList[i] = usernameList[i].replace(/[\[\]]/g, "").trim();
+                }
+                return usernameList;
             }
         },
         methods:{
             ...mapMutations([
                 'RECORD_USERINFO',
-                'RECORD_LOGININFO'
             ]),
             toLoginForm(){
                 this.loginForm = true;
                 this.registerForm = false;
+                if(this.username == ''){
+                    this.regUsername = false;
+                }else{
+                    this.regUsername = true;
+                };
+                this.showUserReg = false;
             },
             toRegisterForm(){
                 this.loginForm = false;
                 this.registerForm = true;
-                console.log('register')
+                if(this.username == ''){
+                    this.loginUsername = false;
+                }else{
+                    this.loginUsername = true;
+                };
+                this.showUserLogin = false;
             },
             inputPhone(){
                 this.phone_error = null;
             },
             inputPassword(){
                 this.password_error = null;
+            },
+            inputUsername(){
+                this.username_error = null;
+            },
+            regInputPhone(){
+                this.reg_phone_error = null;
+            },
+            regInputUsername(){
+                this.reg_username_error = null
+            },
+            regInputPassword(){
+                this.reg_password_error = null
+            },
+            regInputConfirmPassword(){
+                this.reg_confirm_password_error = null
             },
             blurPhone(){
 
@@ -239,7 +300,6 @@
                 }else{
                     this.showPage = this.usernameList.length-1
                 }
-                console.log(this.showPage);
             },
             toNext(){
                 if(this.showPage < this.usernameList.length-1){
@@ -247,9 +307,23 @@
                 }else{
                     this.showPage = 0;
                 }
-                console.log(this.page);
+            },
+            toPrev2(){
+                if(this.showRegPage > 0){
+                    this.showRegPage -=1;
+                }else{
+                    this.showRegPage = this.regUsernameList.length-1
+                }
+            },
+            toNext2(){
+                if(this.showRegPage < this.regUsernameList.length-1){
+                    this.showRegPage +=1;
+                }else{
+                    this.showRegPage = 0;
+                }
             },
             async login(){
+                this.loginInfo = null;
                 if(this.loginForm){
                     if(!this.phone){
                         this.phone_error = '手机号不能为空';
@@ -259,52 +333,66 @@
                         this.password_error = '密码不能为空';
                     }else if(this.password.length < 8){
                         this.password_error = '密码必须大于等于八位字符';
-                    }
-                }
-                this.loginInfo = await passwordLogin(this.phone, this.password);
-                if(this.loginInfo.result == 'false'){
-                    let errorno = this.loginInfo.errorno;
-                     switch (errorno) {
-                        case "E01000":
-                            this.phone_error = "至少有一个参数丢失";
-                            break;
-                        case "E01070":
-                            this.phone_error = "手机没有找到";
-                            break;
-                        case "E01072":
-                            this.username_error = "用户名没有找到";
-                            break;
-                        case "E01080":
-                            this.password_error = "密码错误";
-                            break;
-                    }
-                    if(errorno == 'E01071'){
-                        //多用户
-                        this.loginUsername = true;
-                        this.showUserLogin = true;
-                        let usernameList = this.getUsernameList;
-                        for(let i = 0;i < usernameList.length/3;i++){
-                            let pages = [];
-                            for(let j = 0;j < 3;j++){
-                                if(!(typeof(usernameList[i*3+j]) =='undefined')){
-                                    pages.push(usernameList[i*3+j]);
+                    }else{
+                        this.loginInfo = await passwordLogin(this.phone,this.username,this.password);
+                        if(!this.loginInfo){
+                            this.loginNeterr = true
+                        }else{
+                            this.loginNeterr = false
+                        }
+                        if(this.loginInfo.result == 'false'){
+                            let errorno = this.loginInfo.errorno;
+                            switch (errorno) {
+                                case "E01000":
+                                    this.phone_error = "至少有一个参数丢失";
+                                    break;
+                                case "E01070":
+                                    this.phone_error = "手机没有找到";
+                                    break;
+                                case "E01072":
+                                    this.username_error = "用户名没有找到";
+                                    break;
+                                case "E01080":
+                                    this.password_error = "密码错误";
+                                    break;
+                            }
+                            if(errorno == 'E01071'){
+                                //多用户
+                                this.loginUsername = true;
+                                this.showUserLogin = true;
+                                let usernameList = this.getUsernameList;
+                                for(let i = 0;i < usernameList.length/3;i++){
+                                    let pages = [];
+                                    for(let j = 0;j < 3;j++){
+                                        if(!(typeof(usernameList[i*3+j]) =='undefined')){
+                                            pages.push(usernameList[i*3+j]);
+                                        }
+                                    }
+                                    this.usernameList.push(pages);
                                 }
                             }
-                            this.usernameList.push(pages);
+                        }else{
+                            //用户登录成功
+                            let useruuid = this.loginInfo.uuid;
+                            let userInfo = await queryUser(useruuid);
+                            console.log(userInfo);
+                            // userInfo.uuid = useruuid;
+                            this.RECORD_USERINFO(userInfo);
+                            this.$router.go(-1);
                         }
-                        console.log(this.usernameList);
                     }
-                }else{
-                    //单用户登录成功
-                    let UserUUID = this.loginInfo.uuid;
-                    console.log("单用户登录成功");
                 }
             },
             multiUserLogin : async function (username) {
+                this.loginInfo = null;
                 this.username = username;
-                console.log(this.username);
                 this.showUserLogin = false;
-                this.loginInfo = await multiUserLogin(this.phone,this.username,this.password);
+                this.loginInfo = await passwordLogin(this.phone,this.username,this.password);
+                if(!this.loginInfo){
+                    this.loginNeterr = true
+                }else{
+                    this.loginNeterr = false
+                }
                 if(this.loginInfo.result == 'false'){
                     let errorno = this.loginInfo.errorno;
                      switch (errorno) {
@@ -317,9 +405,71 @@
                     }
                 }else{
                     //多用户登录成功
-                    let UserUUID = this.loginInfo.uuid;
-                    console.log("多用户登录成功");
+                    let useruuid = this.loginInfo.uuid;
+                    let userInfo = await queryUser(useruuid);
+                    console.log(userInfo);
+                    // userInfo.uuid = useruuid;
+                    this.RECORD_USERINFO(userInfo);
+                    this.$router.go(-1);
                 }
+            },
+            async register(){
+                this.registerInfo = null;
+                if(this.registerForm){
+                    if(!this.phone){
+                        this.reg_phone_error = '手机号不能为空';
+                    }else if(!this.rightPhone){
+                        this.reg_phone_error = '请输入正确的手机号';
+                    }else if(!this.regPassword){
+                        this.reg_password_error = '密码不能为空';
+                    }else if(this.regPassword.length < 8){
+                        this.reg_password_error = '密码必须大于等于八位字符';
+                    }else if(this.confirmPassword !== this.regPassword){
+                        this.reg_confirm_password_error = '两次密码输入不一致';
+                    }else{
+                        this.registerInfo = await createUser(this.phone,this.username,this.regPassword);
+                        if(!this.registerInfo){
+                            this.regNeterr = true
+                        }else{
+                            this.regNeterr = false
+                        }
+                        if(this.registerInfo.result == 'false'){
+                            let errorno = this.registerInfo.errorno;
+                            switch (errorno) {
+                                case "E01000":
+                                    this.reg_phone_error = "至少有一个参数丢失";
+                                    break;
+                                case "E01010":
+                                    this.reg_phone_error = "手机号格式错误";
+                                    break;
+                                case "E01022":
+                                    this.regUsername = true;
+                                    this.reg_username_error = "用户名已存在";
+                            }
+                            if(errorno == 'E01021'){
+                                //多用户
+                                this.regUsername = true;
+                                this.showUserReg = true;
+                                let usernameList = this.getRegUsernameList;
+                                for(let i = 0;i < usernameList.length/3;i++){
+                                    let pages = [];
+                                    for(let j = 0;j < 3;j++){
+                                        if(!(typeof(usernameList[i*3+j]) =='undefined')){
+                                            pages.push(usernameList[i*3+j]);
+                                        }
+                                    }
+                                    this.regUsernameList.push(pages);
+                                }
+                            }
+                        }else{
+                            // 注册成功
+                            this.regSuccess = true;
+                        }
+                    }
+                }
+            },
+            continueReg(){
+                this.showUserReg = false;
             }
         }
     }
@@ -878,6 +1028,7 @@ p {
     font-family: "微软雅黑";
     font-size: 36px;
     margin-top: 10px;
+    color:#555;
 }
 
 #selector {
@@ -949,7 +1100,6 @@ p {
     background-color: rgb(255, 184, 184);
     padding-right: 12px;
     overflow: hidden;
-    display: none;
 }
 
 #content .fsw_querr span {
@@ -982,7 +1132,6 @@ p {
     border-radius: 5px;
     background-color: rgb(196, 226, 170);
     padding-right: 12px;
-    display: none;
     overflow: hidden;
 }
 
@@ -1028,7 +1177,6 @@ p {
     position: absolute;
     left: 0;
     top: 0;
-    display: none;
     z-index: 11;
 }
 
@@ -1063,7 +1211,7 @@ p {
 }
 
 div.do_login,
-.do_registration {
+div.do_registration {
     display: inline-block;
   padding: 6px 12px;
   margin-bottom: 0;
@@ -1122,6 +1270,7 @@ div.do_login,
     right: 0px;
     top: 3px;
     cursor: pointer;
+    color:#555;
 }
 
 #login_form input[type='text'],

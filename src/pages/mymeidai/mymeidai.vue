@@ -1,16 +1,16 @@
 <template>
     <div class="mycontainer">
         <goback title='我的美戴'></goback>
-        <router-link to='/login' class="userInfo" id="userinfo">
+        <router-link :to="userInfo&&userInfo.uuid ? '/mymeidai/userInfo' : '/login' " class="userInfo" id="userinfo">
             <div class="avatar" id="avatar">
                 <img src="/src/images/touxiang.png" alt="">
             </div>
             <div class="username-and-phone">
-                <p class="username" id="username">username</p>
-                <p class="phone" id="phone">phone</p>
+                <p class="username" id="username">{{username}}</p>
+                <p class="phone" id="phone">{{phone}}</p>
             </div>
             <div class="userInfo-right">
-                <img src="/src/images/icons/向右white.png" alt="">
+                <img src="../../images/icons/向右white.png" alt="">
             </div>
         </router-link>
 
@@ -36,18 +36,46 @@
 </template>
 <script>
 import goback from '@/components/goback';
+import {mapState,mapMutations} from 'vuex';
 export default{
+    data(){
+      return{
+        username:'登录/注册',
+        avatar:'../../images/touxiang.png',
+        phone:''
+      }
+    },
+    mounted(){
+      this.initData();
+    },
     components:{
         goback
+    },
+    computed:{
+      ...mapState([
+        'userInfo',
+      ])
+    },
+    methods:{
+      initData(){
+        if(this.userInfo && this.userInfo.uuid){
+          this.username = this.userInfo.username || '暂无用户名';
+          this.phone = this.userInfo.phone;
+          
+        }
+      }
+    },
+    watch: {
+        userInfo: function (value){
+            this.initData()
+        }
     }
 }
 </script>
 <style lang="scss">
 @import "../../style/common.scss";
-body{
-  padding-top: 50px;
-}
 .userInfo {
+  margin-top: 50px;
   display: block;
   width: 100%;
   background-color: rgb(11, 227, 253);

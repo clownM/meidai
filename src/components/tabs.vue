@@ -2,22 +2,22 @@
     <div class="user_tabs">
         <div class="user_tabs_wrap">
             <div class="user_tabs_tab" id="meidaitech" @click="gotoMeidai()">
-                    <img src="/src/images/icons/首页.png" alt="" class="tab_icon">
-                    <!-- <div class="icon"></div> -->
-                    <div>主页</div>
+                <img src="../images/icons/首页.png" alt="" class="tab_icon">
+                <!-- <div class="icon"></div> -->
+                <div>主页</div>
             </div>
             <div class="user_tabs_tab" id="index">
-                <img src="/src/images/icons/购物袋.png" alt="" class="tab_icon">
+                <img src="../images/icons/购物袋.png" alt="" class="tab_icon">
                 <!-- <div class="icon"></div> -->
                 <div>商城</div>
             </div>
             <div class="user_tabs_tab" id="cart">
-                <img src="/src/images/icons/购物车.png" alt="" class="tab_icon">
+                <img src="../images/icons/购物车.png" alt="" class="tab_icon">
                 <!-- <div class="icon"></div> -->
                 <div>购物车</div>
             </div>
             <div class="user_tabs_tab" id="mymeidai" @click="gotoAddress('/mymeidai')">
-                <img src="/src/images/icons/我的.png" alt="" class="tab_icon">
+                <img src="../images/icons/我的.png" alt="" class="tab_icon">
                 <div>我的美戴</div>
             </div>
         </div>
@@ -25,7 +25,6 @@
 </template>
 
 <script>
-    // import {mapState} from 'vuex'
     export default{
         data(){
             return{
@@ -38,11 +37,6 @@
         mounted(){
             
         },
-        // computed: {
-        //     ...mapState([
-        //         'geohash'
-        //     ]),
-        // },
         methods: {
         	gotoAddress(path){
         		this.$router.push(path)
