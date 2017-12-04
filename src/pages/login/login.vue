@@ -375,8 +375,7 @@
                             //用户登录成功
                             let useruuid = this.loginInfo.uuid;
                             let userInfo = await queryUser(useruuid);
-                            console.log(userInfo);
-                            // userInfo.uuid = useruuid;
+                            userInfo.uuid = useruuid;
                             this.RECORD_USERINFO(userInfo);
                             this.$router.go(-1);
                         }
@@ -407,8 +406,7 @@
                     //多用户登录成功
                     let useruuid = this.loginInfo.uuid;
                     let userInfo = await queryUser(useruuid);
-                    console.log(userInfo);
-                    // userInfo.uuid = useruuid;
+                    userInfo.uuid = useruuid;
                     this.RECORD_USERINFO(userInfo);
                     this.$router.go(-1);
                 }

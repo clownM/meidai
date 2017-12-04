@@ -1,6 +1,6 @@
 <template>
     <div class="top-fixed">
-        <div class="go-back">
+        <div class="go-back" @click="goback">
             <span class="icon-back"></span>
             <p>{{ title }}</p>
         </div>
@@ -12,7 +12,12 @@
         data(){
            
         },
-        props:['title']
+        props:['title'],
+        methods:{
+            goback(){
+                this.$router.go(-1);
+            }
+        }
     }
 </script>
 
@@ -42,7 +47,7 @@ div.go-back {
   margin-left: 10px;
   margin-right: 10px;
   /* background-color: yellowgreen; */
-  background-image: url("/src/images/icons/向左.png");
+  background-image: url("../images/icons/向左.png");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;

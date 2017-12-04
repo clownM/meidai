@@ -36,7 +36,7 @@ export const setCookie = (name,content,time) => {
     let d = new Date();
     d.setTime(d.getTime() + (time * 24 * 60 * 60 * 1000));
     let expires = "expires=" + d.toGMTString();
-    document.cookie = name + "=" + content + "; " + expires+";path=/";
+    document.cookie = name + "=" + escape(content) + "; " + expires;
 }
 /**
  * 获取cookie
@@ -47,7 +47,8 @@ export const getCookie = name => {
     let cookies = document.cookie.split(';');
     for (var i = 0; i < cookies.length; i++)  { 
         let cookie = cookies[i].trim(); 
-        if (cookie.indexOf(name) == 0) return cookie.substring(name.length, cookie.length);
+        if (cookie.indexOf(name) == 0) 
+            return unescape(cookie.substring(name.length, cookie.length));
     }
     return "";
 }

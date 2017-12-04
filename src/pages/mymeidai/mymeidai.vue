@@ -1,9 +1,9 @@
 <template>
     <div class="mycontainer">
-        <goback title='我的美戴'></goback>
-        <router-link :to="userInfo&&userInfo.uuid ? '/mymeidai/userInfo' : '/login' " class="userInfo" id="userinfo">
+        <toptitle title='我的美戴'></toptitle>
+        <router-link to="/userInfo" class="userInfo router-link" id="userinfo">
             <div class="avatar" id="avatar">
-                <img src="/src/images/touxiang.png" alt="">
+                <img src="../../images/touxiang.png" alt="">
             </div>
             <div class="username-and-phone">
                 <p class="username" id="username">{{username}}</p>
@@ -17,26 +17,29 @@
         <div class="others-wrap">
             <ul>
                 <li>
-                    <router-link to='/orderlist' class="link">
-                        <span><img src="/src/images/icons/订单.png" alt=""></span>
+                    <router-link to='/orderlist' class="router-link">
+                        <span><img src="../../images/icons/订单.png" alt=""></span>
                         <span>我的订单</span>
-                        <span><img src="/src/images/icons/向右.png" alt=""></span>
+                        <span><img src="../../images/icons/向右.png" alt=""></span>
                     </router-link>
                 </li>
                 <li>
                     <a href="javascript:0">
-                        <span><img src="/src/images/icons/坐标.png" alt=""></span>
+                        <span><img src="../../images/icons/坐标.png" alt=""></span>
                         <span>收货地址</span>
-                        <span><img src="/src/images/icons/向右.png" alt=""></span>
+                        <span><img src="../../images/icons/向右.png" alt=""></span>
                     </a>
                 </li>
             </ul>
         </div>
+        <tabs></tabs>
     </div>
 </template>
 <script>
-import goback from '@/components/goback';
+import toptitle from '@/components/toptitle';
+import tabs from '@/components/tabs';
 import {mapState,mapMutations} from 'vuex';
+import {getCookie,setCookie} from '../../config/utils';
 export default{
     data(){
       return{
@@ -49,7 +52,7 @@ export default{
       this.initData();
     },
     components:{
-        goback
+        toptitle,tabs
     },
     computed:{
       ...mapState([
@@ -61,7 +64,6 @@ export default{
         if(this.userInfo && this.userInfo.uuid){
           this.username = this.userInfo.username || '暂无用户名';
           this.phone = this.userInfo.phone;
-          
         }
       }
     },
@@ -74,9 +76,9 @@ export default{
 </script>
 <style lang="scss">
 @import "../../style/common.scss";
+@import "../../style/fswear";
 .userInfo {
   margin-top: 50px;
-  display: block;
   width: 100%;
   background-color: rgb(11, 227, 253);
   padding: 20px 10px;
@@ -133,8 +135,7 @@ export default{
       background-color: #fff;
       border-bottom: 1px solid rgb(240, 240, 240);
       padding: 0 10px;
-      .link {
-        display: block;
+      .router-link {
         width: 100%;
         height: 50px;
         span:nth-child(2) {

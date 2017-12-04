@@ -1,14 +1,11 @@
 import {
 	queryUser,
-	// getAddressList
 } from '../config/getData'
 import {
 	GET_USERINFO,
-	// SAVE_ADDRESS
 } from './mutations.js'
 
 export default {
-
 	async getUserInfo({
 		commit,
 		state

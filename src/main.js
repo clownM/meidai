@@ -1,25 +1,44 @@
-// The Vue build version to load with the `import` command
-// (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue';
-import App from './App';
-import vueRooter from 'vue-router';
-import routes from './router';
+import VueRouter from 'vue-router';
+import routes from './router/';
 import store from './store/';
+import FastClick from 'fastclick'
 import {routerMode} from './config/env'
 
+if ('addEventListener' in document) {
+    document.addEventListener('DOMContentLoaded', function() {
+        FastClick.attach(document.body);
+    }, false);
+}
 
-Vue.config.productionTip = false;
-const router = new vueRooter({
+
+Vue.use(VueRouter);
+
+
+const router = new VueRouter({
   routes,
-  mode:routerMode,
-  strict: process.env.NODE_ENV !== 'production',
+  mode:routerMode
 });
 
-/* eslint-disable no-new */
+// 全局路由守卫
+router.beforeEach((to,from,next) => {
+  const nextRoute = ['userInfo','newPwd','switchUser','orederlist'];
+  let isLogin = store.state.login;
+  if(nextRoute.indexOf(to.name) >= 0){
+    if(!isLogin){
+      router.push({name:'login'});
+    }
+  }
+  if(to.name === 'login'){
+    if(isLogin){
+      router.push({name:'mymeidai'});
+    }
+  }
+  next();
+});
+
+
 new Vue({
-  el: '#app',
   router,
   store,
-  template: '<App/>',
-  components: { App },
-});
+}).$mount('#app');

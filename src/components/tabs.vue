@@ -6,12 +6,12 @@
                 <!-- <div class="icon"></div> -->
                 <div>主页</div>
             </div>
-            <div class="user_tabs_tab" id="index">
+            <div class="user_tabs_tab" id="index" @click="gotoAddress('/mall')">
                 <img src="../images/icons/购物袋.png" alt="" class="tab_icon">
                 <!-- <div class="icon"></div> -->
                 <div>商城</div>
             </div>
-            <div class="user_tabs_tab" id="cart">
+            <div class="user_tabs_tab" id="cart" @click="gotoAddress('/shoppingCart')">
                 <img src="../images/icons/购物车.png" alt="" class="tab_icon">
                 <!-- <div class="icon"></div> -->
                 <div>购物车</div>

@@ -1,7 +1,6 @@
 
 import ajax from './ajax';
-
-
+import {getCookie} from './utils';
 
 /**
  * 密码登录
@@ -34,11 +33,11 @@ export const createUser =(phone,username,password) => ajax({
 /**
  * 获取用户信息
  */
-export const queryUser =(uuid) => ajax({
+export const queryUser =() => ajax({
 	url:'/user',
 	data:{
 		action:'query',
-		uuid:uuid,
+		uuid:getCookie('UserUUID'),
 		phone:'',
 		username:'',
 		gender:'',
@@ -51,10 +50,16 @@ export const queryUser =(uuid) => ajax({
 
 
 
-// /**
-//  * 检测帐号是否存在
-//  */
-// export const checkExsis = (checkNumber, type) => fetch('/user', {
-// 	action: 'login',
-// 	type
-// });
+/**
+ * 修改密码
+ */
+export const changepassword = (uuid, oldpwd, newpwd) => ajax({
+	url:'/user',
+	data:{
+		action: 'update',
+		uuid: uuid,
+		oldpassword: oldpwd,
+		password:newpwd
+	},
+	dataType:'JSON'
+})
