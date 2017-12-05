@@ -1,6 +1,7 @@
 <template>
     <div class="mallindex">
         <p>商城首页</p>
+        <button @click="$router.push('/userInfo')">跳转链接</button>
         <tabs></tabs>
     </div>
 </template>

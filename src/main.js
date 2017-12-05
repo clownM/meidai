@@ -4,6 +4,7 @@ import routes from './router/';
 import store from './store/';
 import FastClick from 'fastclick'
 import {routerMode} from './config/env'
+import {getCookie} from './config/utils'
 
 if ('addEventListener' in document) {
     document.addEventListener('DOMContentLoaded', function() {
@@ -20,22 +21,22 @@ const router = new VueRouter({
   mode:routerMode
 });
 
-// 全局路由守卫
-router.beforeEach((to,from,next) => {
-  const nextRoute = ['userInfo','newPwd','switchUser','orederlist'];
-  let isLogin = store.state.login;
-  if(nextRoute.indexOf(to.name) >= 0){
-    if(!isLogin){
-      router.push({name:'login'});
-    }
-  }
-  if(to.name === 'login'){
-    if(isLogin){
-      router.push({name:'mymeidai'});
-    }
-  }
-  next();
-});
+// 导航守卫
+// router.beforeEach((to,from,next) => {
+//   const nextRoute = ['/mymeidai/userInfo','/newPwd','/switchUser','/orderlist'];
+//   let UserUUID = getCookie('UserUUID');
+//   if(nextRoute.indexOf(to.path) >= 0){
+//     if(!UserUUID){
+//       router.push({path:'/login'});
+//     }
+//   }
+//   if(to.name === 'login'){
+//     if(UserUUID){
+//       router.push({path:'/mymeidai'});
+//     }
+//   }
+//   next();
+// });
 
 
 new Vue({

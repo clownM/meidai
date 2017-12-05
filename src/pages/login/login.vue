@@ -176,8 +176,9 @@
 
 <script>
     import {mapState, mapMutations} from 'vuex'
-    import {passwordLogin,createUser,queryUser} from '../../config/getData' 
+    import {passwordLogin,createUser} from '../../config/getData' 
     import ajax from '../../config/ajax'
+    import {setCookie} from '../../config/utils'
     export default{
         data(){
             return {
@@ -374,9 +375,10 @@
                         }else{
                             //用户登录成功
                             let useruuid = this.loginInfo.uuid;
-                            let userInfo = await queryUser(useruuid);
-                            userInfo.uuid = useruuid;
-                            this.RECORD_USERINFO(userInfo);
+                            // let userInfo = await queryUser(useruuid);
+                            // userInfo.uuid = useruuid;
+                            this.RECORD_USERINFO(this.loginInfo);
+                            this.$store.dispatch('getUserInfo');
                             this.$router.go(-1);
                         }
                     }
@@ -405,9 +407,10 @@
                 }else{
                     //多用户登录成功
                     let useruuid = this.loginInfo.uuid;
-                    let userInfo = await queryUser(useruuid);
-                    userInfo.uuid = useruuid;
-                    this.RECORD_USERINFO(userInfo);
+                    // let userInfo = await queryUser(useruuid);
+                    // userInfo.uuid = useruuid;
+                    this.RECORD_USERINFO(this.loginInfo);
+                    this.$store.dispatch('getUserInfo')
                     this.$router.go(-1);
                 }
             },

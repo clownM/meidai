@@ -1,7 +1,7 @@
 <template>
     <div class="mycontainer">
         <toptitle title='我的美戴'></toptitle>
-        <router-link to="/userInfo" class="userInfo router-link" id="userinfo">
+        <div  class="userInfo router-link" id="userinfo" @click="$router.push('/userInfo')">
             <div class="avatar" id="avatar">
                 <img src="../../images/touxiang.png" alt="">
             </div>
@@ -12,7 +12,7 @@
             <div class="userInfo-right">
                 <img src="../../images/icons/向右white.png" alt="">
             </div>
-        </router-link>
+        </div>
 
         <div class="others-wrap">
             <ul>
@@ -33,6 +33,9 @@
             </ul>
         </div>
         <tabs></tabs>
+        <!-- <transition name="router-slid" mode="out-in">
+            <router-view></router-view>
+        </transition> -->
     </div>
 </template>
 <script>
@@ -61,7 +64,10 @@ export default{
     },
     methods:{
       initData(){
-        if(this.userInfo && this.userInfo.uuid){
+        if(getCookie('UserUUID')){
+          if(!this.userInfo){
+            this.$store.dispatch('getUserInfo');
+          }
           this.username = this.userInfo.username || '暂无用户名';
           this.phone = this.userInfo.phone;
         }
@@ -152,6 +158,13 @@ export default{
       margin-top: -4px;
     }
   }
+}
+.router-slid-enter-active, .router-slid-leave-active {
+        transition: all .4s;
+    }
+.router-slid-enter, .router-slid-leave-active {
+    transform: translate3d(2rem, 0, 0);
+    opacity: 0;
 }
 </style>
 

@@ -1,7 +1,9 @@
 <template>
     <div class="top-fixed">
-        <div class="go-back" @click="goback">
-            <span class="icon-back"></span>
+        <div class="go-back" @click="$router.go(-1)">
+            <span class="icon-back">
+                <img src="../images/icons/向左.png" alt="">
+            </span>
             <p>{{ title }}</p>
         </div>
     </div>
@@ -10,18 +12,17 @@
 <script>
     export default{
         data(){
-           
+           return{}
         },
         props:['title'],
         methods:{
-            goback(){
-                this.$router.go(-1);
-            }
+
         }
     }
 </script>
 
-<style>
+<style lang='scss'>
+@import '../style/common';
 .top-fixed {
   width: 100%;
   position: fixed;
@@ -38,18 +39,16 @@ div.go-back {
   display: flex;
   justify-content: flex-start;
   font-size: 18px;
-}
-
-.go-back .icon-back {
-  width: 20px;
-  height: 20px;
-  margin-top: 15px;
-  margin-left: 10px;
-  margin-right: 10px;
-  /* background-color: yellowgreen; */
-  background-image: url("../images/icons/向左.png");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+  .icon-back{
+    width: 20px;
+    height: 20px;
+    margin-top: 15px;
+    margin-left: 10px;
+    margin-right: 10px;
+      img{
+          width: 100%;
+          height: 100%;
+      }
+  }
 }
 </style>

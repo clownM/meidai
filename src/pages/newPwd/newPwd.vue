@@ -1,5 +1,5 @@
 <template>
-    <div class='container'>
+    <div class='container-absolute'>
         <goback title='修改密码'></goback>
         <div class="mt50px">
             <div class='section'>
@@ -18,8 +18,8 @@
     </div>
 </template>
 <script>
-    import goback from '../../../components/goback'
-    import {changePassword} from '../../../config/getData'
+    import goback from '../../components/goback'
+    import {changePassword} from '../../config/getData'
     import {mapState} from 'vuex'
     export default{
         data(){
@@ -65,10 +65,8 @@
     }
 </script>
 <style lang='scss'>
-    @import '../../../style/common';
-    .container{
-        padding-top: 50px;
-    }
+    @import '../../style/common';
+    @import '../../style/fswear';
     .mt50{
         width: 100%;
         padding: 5px 10px;

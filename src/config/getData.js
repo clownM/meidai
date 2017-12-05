@@ -53,7 +53,7 @@ export const queryUser =() => ajax({
 /**
  * 修改密码
  */
-export const changepassword = (uuid, oldpwd, newpwd) => ajax({
+export const changePassword = (uuid, oldpwd, newpwd) => ajax({
 	url:'/user',
 	data:{
 		action: 'update',

@@ -1,83 +1,86 @@
 <template>
-    <div class="container">
+    <div class="container-absolute">
         <goback title='用户信息'></goback>
         <div class="ullist">
             <ul>
                 <li>
-                    <router-link to="./">
+                    <router-link to="/">
                         <span>
-                            <img src="../../../images/icons/我的.png" alt="">
+                            <img src="../../images/icons/我的.png" alt="">
                         </span>
                         <span>{{ username }}</span>
                         <span>
-                            <img src="../../../images/icons/向右.png" alt="">
+                            <img src="../../images/icons/向右.png" alt="">
                         </span>
                     </router-link>
                 </li>
                 <li>
-                    <router-link to="./">
+                    <router-link to="/">
                         <span>
-                            <img src="../../../images/icons/phone.png" alt="">
+                            <img src="../../images/icons/phone.png" alt="">
                         </span>
                         <span>{{ phone }}</span>
                         <span>
-                            <img src="../../../images/icons/向右.png" alt="">
+                            <img src="../../images/icons/向右.png" alt="">
                         </span>
                     </router-link>
                 </li>
                 <li>
-                    <router-link to="./">
+                    <router-link to="/">
                         <span>
-                            <img src="../../../images/icons/性别.png" alt="">
+                            <img src="../../images/icons/性别.png" alt="">
                         </span>
                         <span>{{ gender }}</span>
                         <span>
-                            <img src="../../../images/icons/向右.png" alt="">
+                            <img src="../../images/icons/向右.png" alt="">
                         </span>
                     </router-link>
                 </li>
                 <li>
-                    <router-link to="./">
+                    <router-link to="/">
                         <span>
-                            <img src="../../../images/icons/生日.png" alt="">
+                            <img src="../../images/icons/生日.png" alt="">
                         </span>
                         <span>{{ birthday }}</span>
                         <span>
-                            <img src="../../../images/icons/向右.png" alt="">
+                            <img src="../../images/icons/向右.png" alt="">
                         </span>
                     </router-link>
                 </li>
                 <li>
-                    <router-link to="./switchUser">
+                    <router-link to="/switchUser">
                         <span>
-                            <img src="../../../images/icons/group_fill.png" alt="">
+                            <img src="../../images/icons/group_fill.png" alt="">
                         </span>
                         <span>切换关联用户</span>
                         <span>
-                            <img src="../../../images/icons/向右.png" alt="">
+                            <img src="../../images/icons/向右.png" alt="">
                         </span>
-                    </router>
+                    </router-link>
                 </li>
                 <li>
-                    <a href="./newPwd">
+                    <router-link to="/newPwd">
                         <span>
-                            <img src="../../../images/icons/lock.png" alt="">
+                            <img src="../../images/icons/lock.png" alt="">
                         </span>
                         <span>修改登录密码</span>
                         <span>
-                            <img src="../../../images/icons/向右.png" alt="">
+                            <img src="../../images/icons/向右.png" alt="">
                         </span>
-                    </a>
+                    </router-link>
                 </li>
             </ul>
         </div>
-        <button>退出登录</button>
+        <button @click="logout">退出登录</button>
+        <transition>
+            <router-view></router-view>
+        </transition>
     </div>
 </template>
 <script>
 import goback from '@/components/goback';
 import {mapState,mapMutations} from 'vuex';
-import {getCookie,setCookie} from '../../../config/utils';
+import {getCookie,setCookie,delCookie} from '../../config/utils';
 export default{
     data(){
       return{
@@ -99,15 +102,25 @@ export default{
       ])
     },
     methods:{
-      initData(){
-        if(this.userInfo && this.userInfo.uuid){
-          this.username = this.userInfo.username || '暂无用户名';
-          this.phone = this.userInfo.phone;
-          this.gender = this.userInfo.gender;
-          this.birthday = this.userInfo.birthday;
+        ...mapMutations([
+            'LOGOUT'
+        ]),
+        initData(){
+            if(!userInfo){
+                this.$store.dispatch('getUserInfo')
+            }
+            this.username = this.userInfo.username || '暂无用户名';
+            this.phone = this.userInfo.phone;
+            this.gender = this.userInfo.gender;
+            this.birthday = this.userInfo.birthday;
+        },
+        async logout(){
+            this.LOGOUT();
+            delCookie('UserUUID');
+            this.$router.go(-1);
         }
-      }
     },
+
     watch: {
         userInfo: function (value){
             this.initData()
@@ -116,12 +129,13 @@ export default{
 }
 </script>
 <style lang='scss'>
-    @import '../../../style/common';
-    .container{
+    @import '../../style/common';
+    @import '../../style/fswear';
+    .container-absolute{
         width:100%;
         height: 100%;
         .ullist{
-            margin-top: 60px;
+            margin-top: 10px;
             width: 100%;
             ul{
                 width: 100%;

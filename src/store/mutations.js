@@ -2,8 +2,8 @@ export const SAVE_GEOHASH = 'SAVE_GEOHASH'
 export const RECORD_USERINFO = 'RECORD_USERINFO'
 export const GET_USERINFO = 'GET_USERINFO'
 export const RECORD_LOGININFO = 'RECORD_LOGININFO'
-
-import {setStore,getStore,setCookie,getCookie} from '../config/utils.js'
+export const LOGOUT = 'LOGOUT'
+import {setStore,getStore,setCookie,getCookie,delCookie} from '../config/utils.js'
 
 export default{
 
@@ -15,18 +15,19 @@ export default{
     },
     //获取用户信息存入vuex
 	[GET_USERINFO](state, info) {
-		console.log(info);
-		state.userInfo = {...info}
-		// if (state.userInfo && (state.userInfo.uuid !== getCookie('UserUUID'))) {
-		// 	return;
-		// };
-		// if (!state.login) {
-		// 	return
-		// }
-		// if (info.result) {
-		// 	state.userInfo = {...info};
-		// } else {
-		// 	state.userInfo = null;
-		// }
+		// state.userInfo = {...info}
+		if (state.userInfo && (state.userInfo.uuid !== getCookie('UserUUID'))) {
+			return;
+		};
+		if (info.result) {
+			state.userInfo = {...info};
+		} else {
+			state.userInfo = null;
+		}
 	},
+	// 退出登录
+	[LOGOUT](state){
+		state.userInfo = null,
+		state.login = false;
+	}
 }
