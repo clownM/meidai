@@ -3,17 +3,17 @@
         <goback title='修改密码'></goback>
         <div class="mt50px">
             <div class='section'>
-                <input type="password" placeholder="请输入旧密码" v-model="oldpwd">
+                <input type="password" placeholder="请输入旧密码" v-model="oldpwd" class='inputarea'>
             </div>
             <div class='section'>
-                <input type="password" placeholder="请输入新密码（密码长度最少为8位）" v-model="newpwd1">
+                <input type="password" placeholder="请输入新密码（密码长度最少为8位）" v-model="newpwd1" class='inputarea'>
             </div>
             <div class='section'>
-                <input type="password" placeholder="请确认新密码" v-model="newpwd2">
+                <input type="password" placeholder="请确认新密码" v-model="newpwd2" class='inputarea'>
             </div>
         </div>
         <div class="divbtn">
-            <button @click="submit">确认提交</button>
+            <button @click="submit" class='btn-red-large'>确认提交</button>
         </div>
     </div>
 </template>
@@ -21,12 +21,13 @@
     import goback from '../../components/goback'
     import {changePassword} from '../../config/getData'
     import {mapState} from 'vuex'
+    import {getCookie} from '../../config/utils'
     export default{
         data(){
             return{
-                oldpwd,
-                newpwd1,
-                newpwd2
+                oldpwd:null,
+                newpwd:null,
+                newpwd2:null
             }
         },
         components:{
@@ -39,6 +40,9 @@
         },
         methods:{
             async submit(){
+                if(!this.userInfo){
+                    this.$store.dispatch('getUserInfo')
+                }
                 if(this.oldpwd === ''){
                     alert('请输入旧密码！');
                 }else{
@@ -71,31 +75,31 @@
         width: 100%;
         padding: 5px 10px;
         background-color: #fff;
-        div{
+        .section{
             width: 100%;
             height: 40px;
             padding-top: 3px;
             padding-bottom: 3px;
             border-top: 1px solid rgb(240, 240, 240);
-            input{
+            .inputarea{
                 width: 100%;
                 height: 34px;
                 margin-top: 10px;
                 border: none;
                 border-radius: 5px;
             }
-            input:first-child{
+            .inputarea:first-child{
                 margin-top: 0;
             }
         }
-        div:first-child{
+        .section:first-child{
             border-top: none;
         }
     }
     .divbtn{
         width: 100%;
         padding: 20px 10px;
-        button{
+        .btn-red-large{
             width: 100%;
             height: 50px;
             border-radius: 5px;

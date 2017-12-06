@@ -6,19 +6,19 @@
                 <div class="tabs-head">
                     <ul class="tabs-ul clear">
                         <li>
-                            <a href="javascript:0" v-bind:class='{active:(index == i || isActive == true)}' @click='tabsToggle(0)'>全部</a>
+                            <a href="javascript:0" v-bind:class='{active:(0 == i || isActive == true)}' @click='tabsToggle(0)'>全部</a>
                         </li>
                         <li>
-                            <a href="javascript:0" v-bind:class='{active:index == i}' @click='tabsToggle(1)'>待扫描</a>
+                            <a href="javascript:0" v-bind:class='{active:1 == i}' @click='tabsToggle(1)'>待扫描</a>
                         </li>
                         <li>
-                            <a href="javascript:0" v-bind:class='{active:index == i}' @click='tabsToggle(2)'>待支付</a>
+                            <a href="javascript:0" v-bind:class='{active:2 == i}' @click='tabsToggle(2)'>待支付</a>
                         </li>
                         <li>
-                            <a href="javascript:0" v-bind:class='{active:index == i}' @click='tabsToggle(3)'>生产中</a>
+                            <a href="javascript:0" v-bind:class='{active:3 == i}' @click='tabsToggle(3)'>生产中</a>
                         </li>
                         <li>
-                            <a href="javascript:0" v-bind:class='{active:index == i}' @click='tabsToggle(4)'>待收货</a>
+                            <a href="javascript:0" v-bind:class='{active:4 == i}' @click='tabsToggle(4)'>待收货</a>
                         </li>
                     </ul>
                 </div>
@@ -31,6 +31,7 @@
                         <!-- 全部/待扫描 -->
                         <div class="order" v-for="(order,index) in toscan_array">
                             <div class="order-header">
+                                <div></div>
                                 <div class="status" v-text="order.status"></div>
                             </div>
                             <div class="order-body">
@@ -48,18 +49,21 @@
                                 </div>
                             </div>
                             <div class="order-footer">
-                                <button class="cancelOrder">取消预约</button>
+                                <button class="cancelOrder" @click='cancel(order.orderuuid)'>取消预约</button>
                             </div>
                         </div>
                         <!--  全部/待支付-->
                         <div class="order" v-for="(deal,index) in topay_array">
                             <div class="order-header">
-                                <div class="dealuuid" v-text="deal.uuid"></div>
+                                <div></div>
                                 <div class="status" v-text="deal.status"></div>
                             </div>
                             <div class="order-body">
-                                <div class="orderno">订单编号：
-                                    <span v-text="deal.orderno"></span>
+                                <div class="orderuuid">orderuuid
+                                    <span v-text="deal.orderuuid"></span>
+                                </div>
+                                <div class="dealuuid">dealuuid:
+                                    <span v-text="deal.dealuuid"></span>
                                 </div>
                                 <div class="createdate">order创建时间:
                                     <span v-text="deal.orderCreatedate"></span>
@@ -79,21 +83,22 @@
                                 <div class="price" v-text="'合计： ￥ '+deal.price"></div>
                             </div>
                             <div class="order-footer">
-                                <span class="orderuuid-hidden">{{ deal.orderuuid }}</span>
-                                <span class="dealuuid-hidden">{{ deal.uuid }}</span>
                                 <button class="">付款</button>
-                                <button class="to_order_details">订单详情</button>
+                                <button class="to_order_details" @click="toOrderDetails(deal.orderuuid,deal.dealuuid)">订单详情</button>
                             </div>
                         </div>
                         <!-- 全部/生产中 -->
                         <div class="order" v-for="(deal,index) in printing_array">
                             <div class="order-header">
-                                <div class="dealuuid" v-text="deal.uuid"></div>
+                                <div></div>
                                 <div class="status" v-text="deal.status"></div>
                             </div>
                             <div class="order-body">
-                                <div class="orderno">订单编号：
-                                    <span v-text="deal.orderno"></span>
+                                <div class="orderuuid">orderuuid
+                                    <span v-text="deal.orderuuid"></span>
+                                </div>
+                                <div class="dealuuid">dealuuid:
+                                    <span v-text="deal.dealuuid"></span>
                                 </div>
                                 <div class="createdate">order创建时间:
                                     <span v-text="deal.orderCreatedate"></span>
@@ -113,21 +118,22 @@
                                 <div class="price" v-text="'合计： ￥ '+deal.price"></div>
                             </div>
                             <div class="order-footer">
-                                <span class="orderuuid-hidden">{{ deal.orderuuid }}</span>
-                                <span class="dealuuid-hidden">{{ deal.uuid }}</span>
                                 <button class="">催单</button>
-                                <button class="to_order_details">订单详情</button>
+                                <button class="to_order_details" @click="toOrderDetails(deal.orderuuid,deal.dealuuid)">订单详情</button>
                             </div>
                         </div>
                         <!-- 全部/待收货 -->
                         <div class="order" v-for="(deal,index) in delivering_array">
                             <div class="order-header">
-                                <div class="dealuuid" v-text="deal.uuid"></div>
+                                <div></div>
                                 <div class="status" v-text="deal.status"></div>
                             </div>
                             <div class="order-body">
-                                <div class="orderno">订单编号：
-                                    <span v-text="deal.orderno"></span>
+                                <div class="orderuuid">orderuuid
+                                    <span v-text="deal.orderuuid"></span>
+                                </div>
+                                <div class="dealuuid">dealuuid:
+                                    <span v-text="deal.dealuuid"></span>
                                 </div>
                                 <div class="createdate">order创建时间:
                                     <span v-text="deal.orderCreatedate"></span>
@@ -147,24 +153,23 @@
                                 <div class="price" v-text="'合计： ￥ '+deal.price"></div>
                             </div>
                             <div class="order-footer">
-                                <span class="orderuuid-hidden">{{ deal.orderuuid }}</span>
-                                <span class="dealuuid-hidden">{{ deal.uuid }}</span>
-                                <span class="delivery-company-hidden">{{ deal.delivery_company }}</span>
-                                <span class="delivery-postid-hidden">{{ deal.delivery_postid }}</span>
-                                <button class="to_delivery">查看物流</button>
+                                <button class="to_delivery" @click='toDelivery(deal.delivery_company,deal.delivery_postid)'>查看物流</button>
                                 <button class="">确认收货</button>
-                                <button class="to_order_details">订单详情</button>
+                                <button class="to_order_details" @click="toOrderDetails(deal.orderuuid,deal.dealuuid)">订单详情</button>
                             </div>
                         </div>
                         <!-- 全部/已收货 -->
                         <div class="order" v-for="(deal,index) in done_array">
                             <div class="order-header">
-                                <div class="dealuuid" v-text="deal.uuid"></div>
+                                <div></div>
                                 <div class="status" v-text="deal.status"></div>
                             </div>
                             <div class="order-body">
-                                <div class="orderno">订单编号：
-                                    <span v-text="deal.orderno"></span>
+                                <div class="orderuuid">orderuuid
+                                    <span v-text="deal.orderuuid"></span>
+                                </div>
+                                <div class="dealuuid">dealuuid:
+                                    <span v-text="deal.dealuuid"></span>
                                 </div>
                                 <div class="createdate">order创建时间:
                                     <span v-text="deal.orderCreatedate"></span>
@@ -184,9 +189,7 @@
                                 <div class="price" v-text="'合计： ￥ '+deal.price"></div>
                             </div>
                             <div class="order-footer">
-                                <span class="orderuuid-hidden">{{ deal.orderuuid }}</span>
-                                <span class="dealuuid-hidden">{{ deal.uuid }}</span>
-                                <button class="to_order_details">订单详情</button>
+                                <button class="to_order_details" @click="toOrderDetails(deal.orderuuid,deal.dealuuid)">订单详情</button>
                             </div>
                         </div>
                     </div>
@@ -199,11 +202,12 @@
                     <div v-else>
                         <div class="order" v-for="(order,index) in toscan_array">
                             <div class="order-header">
+                                <div></div>
                                 <div class="status" v-text="order.status"></div>
                             </div>
                             <div class="order-body">
-                                <div class="orderno">订单编号：
-                                    <span v-text="order.orderno"></span>
+                                <div class="orderuuid">orderuuid：
+                                    <span v-text="order.orderuuid"></span>
                                 </div>
                                 <div class="createdate">订单创建时间:
                                     <span v-text="order.createdate"></span>
@@ -216,7 +220,7 @@
                                 </div>
                             </div>
                             <div class="order-footer">
-                                <button class="cancelOrder">取消预约</button>
+                                <button class="cancelOrder" @click='cancel(order.orderuuid)'>取消预约</button>
                             </div>
                         </div>
                     </div>
@@ -229,12 +233,15 @@
                     <div v-else>
                         <div class="order" v-for="(deal,index) in topay_array">
                             <div class="order-header">
-                                <div class="dealuuid" v-text="deal.uuid"></div>
+                                <div></div>
                                 <div class="status" v-text="deal.status"></div>
                             </div>
                             <div class="order-body">
-                                <div class="orderno">订单编号：
-                                    <span v-text="deal.orderno"></span>
+                                <div class="orderuuid">
+                                    orderuuid: <span>{{deal.orderuuid}}</span>
+                                </div>
+                                <div class="dealuuid">dealuuid:
+                                    <span v-text="deal.dealuuid"></span>
                                 </div>
                                 <div class="createdate">order创建时间:
                                     <span v-text="deal.orderCreatedate"></span>
@@ -254,10 +261,8 @@
                                 <div class="price" v-text="'合计： ￥ '+deal.price"></div>
                             </div>
                             <div class="order-footer">
-                                <span class="orderuuid-hidden">{{ deal.orderuuid }}</span>
-                                <span class="dealuuid-hidden">{{ deal.uuid }}</span>
                                 <button class="">付款</button>
-                                <button class="to_order_details">订单详情</button>
+                                <button class="to_order_details" @click="toOrderDetails(deal.orderuuid,deal.dealuuid)">订单详情</button>
                             </div>
                         </div>
                     </div>
@@ -270,12 +275,15 @@
                     <div v-else>
                         <div class="order" v-for="(deal,index) in printing_array">
                             <div class="order-header">
-                                <div class="dealuuid" v-text="deal.uuid"></div>
+                                <div></div>
                                 <div class="status" v-text="deal.status"></div>
                             </div>
                             <div class="order-body">
-                                <div class="orderno">订单编号：
-                                    <span v-text="deal.orderno"></span>
+                                <div class="orderuuid">orderuuid
+                                    <span v-text="deal.orderuuid"></span>
+                                </div>
+                                <div class="dealuuid">dealuuid:
+                                    <span v-text="deal.dealuuid"></span>
                                 </div>
                                 <div class="createdate">order创建时间:
                                     <span v-text="deal.orderCreatedate"></span>
@@ -295,10 +303,8 @@
                                 <div class="price" v-text="'合计： ￥ '+deal.price"></div>
                             </div>
                             <div class="order-footer">
-                                <span class="orderuuid-hidden">{{ deal.orderuuid }}</span>
-                                <span class="dealuuid-hidden">{{ deal.uuid }}</span>
                                 <button class="">催单</button>
-                                <button class="to_order_details">订单详情</button>
+                                <button class="to_order_details" @click="toOrderDetails(deal.orderuuid,deal.dealuuid)">订单详情</button>
                             </div>
                         </div>
                     </div>
@@ -311,12 +317,15 @@
                     <div v-else>
                         <div class="order" v-for="(deal,index) in delivering_array">
                             <div class="order-header">
-                                <div class="dealuuid" v-text="deal.uuid"></div>
+                                <div></div>
                                 <div class="status" v-text="deal.status"></div>
                             </div>
                             <div class="order-body">
-                                <div class="orderno">订单编号：
-                                    <span v-text="deal.orderno"></span>
+                                <div class="orderuuid">orderuuid
+                                    <span v-text="deal.orderuuid"></span>
+                                </div>
+                                <div class="dealuuid">dealuuid:
+                                    <span v-text="deal.dealuuid"></span>
                                 </div>
                                 <div class="createdate">order创建时间:
                                     <span v-text="deal.orderCreatedate"></span>
@@ -336,27 +345,26 @@
                                 <div class="price" v-text="'合计： ￥ '+deal.price"></div>
                             </div>
                             <div class="order-footer">
-                                <span class="orderuuid-hidden">{{ deal.orderuuid }}</span>
-                                <span class="dealuuid-hidden">{{ deal.uuid }}</span>
-                                <span class="delivery-company-hidden">{{ deal.delivery_company }}</span>
-                                <span class="delivery-postid-hidden">{{ deal.delivery_postid }}</span>
-                                <button class="to_delivery">查看物流</button>
+                                <button class="to_delivery" @click='toDelivery(deal.delivery_company,deal.delivery_postid)'>查看物流</button>
                                 <button class="">确认收货</button>
-                                <button class="to_order_details">订单详情</button>
+                                <button class="to_order_details" @click="toOrderDetails(deal.orderuuid,deal.dealuuid)">订单详情</button>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-
         </div>
+        <transition name="router-slid" mode="out-in">
+            <router-view></router-view>
+        </transition>
     </div>
-
 </template>
 <script>
 import goback from "@/components/goback";
-import { getOrderList } from "@/config/getData";
-import { imgBaseUrl } from "@/config/env";
+import {mapState,mapMutations} from 'vuex';
+import { queryOrder,cancelOrder,queryDeal } from "@/config/getData"
+import {formatDate,getStatus} from '../../config/fswear'
+import {getCookie} from '../../config/utils'
 export default {
   data() {
     return {
@@ -366,27 +374,127 @@ export default {
       printing_array: [],
       delivering_array: [],
       done_array: [],
-      offset: 0,
-      preventRepeat: false, //防止重复获取
-      showLoading: true, //显示加载动画
+
       i: 0,
       isActive:true
     };
   },
-  mouted() {
+  mounted() {
     this.initData();
   },
-  mixins: [],
   components: {
     goback
   },
-  computed: {},
+  computed: {
+      ...mapState([
+          'userInfo'
+      ])
+  },
   methods: {
+    ...mapMutations([
+        'ORDER_DETAILS_UUID',
+        'SAVE_DELIVERY'
+    ]),
     async initData() {
-      if (true) {
-        // let res = await getOrderList(this.userInfo.user_id, this.offset);
-        // this.orderList = [...res];
-      }
+        if(getCookie('UserUUID')){
+            if (!this.userInfo) {
+                this.$store.dispatch('getUserInfo');
+            }
+        }
+        let orders = this.userInfo.orders;
+         orders.forEach(async (orderuuid) => {
+            let res = await queryOrder(orderuuid);
+            let deals = res.deals;         
+            if(res){
+                // 待扫描
+                if(res.status == 'toscan'){
+                    this.toscan_array.push({
+                        'orderuuid':orderuuid,
+                        'createdate':formatDate(res.createdate,'long_'),
+                        'station':res.station,
+                        'appointmentdate':formatDate(res.appointmentdate,'long_'),
+                        'scandate':formatDate(res.scandate,'long_'),
+                        'status':'等待扫描'
+                    })
+                }else{
+                    if(deals.length !== 0){
+                        deals.forEach(async (dealuuid) => {
+                            let dealobj = await queryDeal(dealuuid);
+                            /* 待支付 */
+                            if(dealobj.paymentstatus == 'topay'){
+                                this.topay_array.push({
+                                    'orderuuid':orderuuid,
+                                    'dealuuid':dealuuid,
+                                    'station': res.station,
+                                    'status':'待支付',
+                                    'price':dealobj.price,
+                                    'appointmentdate':formatDate(res.appointmentdate,'long_'),
+                                    'scandate':formatDate(res.scandate,'long_'),
+                                    'orderCreatedate':formatDate(res.createdate,'long_'),
+                                    'dealCreatedate':formatDate(dealobj.createdate,'long_'),
+                                    'discount':dealobj.discount
+                                })
+                            /* 生产中 */
+                            }else if(dealobj.paymentstatus == 'paid' && dealobj.status == 'printing'){
+                                this.printing_array.push({
+                                    'orderuuid':orderuuid,
+                                    'dealuuid':dealuuid,
+                                    'station': res.station,
+                                    'status': '生产中',
+                                    'price':dealobj.price,
+                                    'appointmentdate':formatDate(res.appointmentdate,'long_'),
+                                    'scandate':formatDate(res.scandate,'long_'),
+                                    'orderCreatedate':formatDate(res.createdate,'long_'),
+                                    'dealCreatedate':formatDate(dealobj.createdate,'long_'),
+                                    'discount':dealobj.discount
+                                })
+                            /* 运输中 */
+                            }else if(dealobj.paymentstatus == 'paid' && dealobj.status == 'delivering'){
+                                let delivery = dealobj.delivery;
+                                let delivery_company = '';
+                                let delivery_postid = '';
+                                delivery = JSON.parse(delivery);
+                                if (delivery.postprocessing_delivery == undefined) {
+                                    delivery_company = delivery.production_delivery.courier_company;
+                                    delivery_postid = delivery.production_delivery.courier_number;
+                                } else {
+                                    delivery_company = delivery.postprocessing_delivery.courier_company;
+                                    delivery_postid = delivery.postprocessing_delivery.courier_number;
+                                }
+                                this.delivering_array.push({
+                                    'orderuuid':orderuuid,
+                                    'dealuuid':dealuuid,
+                                    'station': res.station,
+                                    'status': '运输中',
+                                    'price':dealobj.price,
+                                    'appointmentdate':formatDate(res.appointmentdate,'long_'),
+                                    'scandate':formatDate(res.scandate,'long_'),
+                                    'orderCreatedate':formatDate(res.createdate,'long_'),
+                                    'dealCreatedate':formatDate(dealobj.createdate,'long_'),
+                                    'discount':dealobj.discount,
+                                    'delivery_company':delivery_company,
+                                    'delivery_postid': delivery_postid
+                                })
+                            /* 已完成 */
+                            }else if(dealobj.paymentstatus == 'paid' && dealobj.status =='done'){
+                                this.done_array.push({
+                                    'orderuuid':orderuuid,
+                                    'dealuuid':dealuuid,
+                                    'station': res.station,
+                                    'status': '交易完成',
+                                    'price':dealobj.price,
+                                    'appointmentdate':formatDate(res.appointmentdate,'long_'),
+                                    'scandate':formatDate(res.scandate,'long_'),
+                                    'orderCreatedate':formatDate(res.createdate,'long_'),
+                                    'dealCreatedate':formatDate(dealobj.createdate,'long_'),
+                                    'discount':dealobj.discount
+                                })
+                            }
+                        })
+                    }
+                }
+            }
+        });
     },
     isEmpty(array) {
       if (array.length == 0) {
@@ -396,20 +504,40 @@ export default {
       }
     },
     tabsToggle(index) {
-      //    var links = document.getElementsByClassName("link");
       this.i = index;
       this.isActive = false;
+      document.body.scrollTop = 0;//切换tabs滚动条回到顶部
+    },
+    // 取消预约order
+    async cancel(orderuuid){
+        let res = await cancelOrder(orderuuid);
+        if(res.result = 'true'){
+            alert('订单取消成功');
+        }else{
+            alert('取消失败');
+        }
+    },
+    // 订单详情
+    toOrderDetails(orderuuid,dealuuid){
+        this.ORDER_DETAILS_UUID({orderuuid:orderuuid,dealuuid:dealuuid});
+        this.$router.push('/orderlist/orderDetails');
+    },
+    //查看物流
+    toDelivery(company,postid){
+        this.SAVE_DELIVERY({company:company,postid,postid});
+        this.$router.push('/delivery')
     }
   },
-  watch: {}
+  watch: {
+    userInfo: function (value){
+        this.initData()
+    }
+  }
 };
 </script>
 
 <style lang='scss'>
 @import "../../style/common";
-body{
-    padding-top: 110px;
-}
 .tabs-head {
   width: 100%;
   height: 50px;
@@ -417,7 +545,7 @@ body{
   border-top: 1px solid rgb(240, 240, 240);
   position: fixed;
   top: 50px;
-  z-index: 999;
+  z-index: 100;
 }
 
 .tabs-head ul li {
@@ -443,6 +571,7 @@ body{
 
 .tabs-body {
   width: 100%;
+  margin-top: 110px;
 }
 
 .tabs-body .tabs-contents {
@@ -478,7 +607,6 @@ body{
   min-height: 25px;
   padding-left: 10px;
   padding-right: 10px;
-  /* line-height: 100%; */
 }
 .order .order-body > div {
   min-height: 25px;
@@ -527,17 +655,12 @@ body{
 .tabs-contents {
   position: relative;
 }
-#loading {
-  width: 100%;
-  height: 100%;
-  z-index: 999;
-  position: absolute;
-  background-color: rgb(240, 240, 240);
-}
-.orderuuid-hidden,
-.dealuuid-hidden,
-.delivery-company-hidden,
-.delivery-postid-hidden {
-  display: none;
+
+.router-slid-enter-active, .router-slid-leave-active {
+        transition: all .4s;
+    }
+.router-slid-enter, .router-slid-leave-active {
+    transform: translate3d(2rem, 0, 0);
+    opacity: 0;
 }
 </style>

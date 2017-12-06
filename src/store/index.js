@@ -7,9 +7,13 @@ import getters from './getters'
 Vue.use(Vuex)
 
 const state = {
+	login: false,//是否登录
+	userInfo: null, //用户信息
+	orderuuid:null,//订单详情页orderuuid
+	dealuuid:null,//订单详情页dealuuid
+
 	cartList: {}, // 加入购物车的商品列表
 	shopDetail: null, //商家详情信息
-	userInfo: null, //用户信息
 	shopid: null,//商铺id
 	remarkText: null,//可选备注内容
 	inputText: '',//输入备注内容
@@ -25,11 +29,9 @@ const state = {
 	orderParam: null,//订单的参数
 	orderMessage: null, //订单返回的信息
 	orderDetail: null, //订单详情
-	login: false,//是否登录
 	imgPath:null,//头像地址
 	removeAddress:[],//移除地址
 	addAddress:'',		//新增地址
-
 }
 
 export default new Vuex.Store({

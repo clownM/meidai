@@ -15,20 +15,28 @@
         </div>
 
         <div class="others-wrap">
-            <ul>
+            <ul class='clear'>
                 <li>
                     <router-link to='/orderlist' class="router-link">
-                        <span><img src="../../images/icons/订单.png" alt=""></span>
-                        <span>我的订单</span>
-                        <span><img src="../../images/icons/向右.png" alt=""></span>
+                        <div class='aside'>
+                            <img src="../../images/icons/订单.png" alt="">
+                        </div>
+                        <div class="right">
+                            <span>我的订单</span>
+                            <img src="../../images/icons/向右.png" alt="">
+                        </div>
                     </router-link>
                 </li>
                 <li>
-                    <a href="javascript:0">
-                        <span><img src="../../images/icons/坐标.png" alt=""></span>
+                    <router-link to='' class='router-link'>
+                      <div class="aside">
+                        <img src="../../images/icons/坐标.png" alt="">
+                      </div>
+                      <div class="right">
                         <span>收货地址</span>
-                        <span><img src="../../images/icons/向右.png" alt=""></span>
-                    </a>
+                        <img src="../../images/icons/向右.png" alt="">
+                      </div>
+                    </router-link>
                 </li>
             </ul>
         </div>
@@ -144,18 +152,24 @@ export default{
       .router-link {
         width: 100%;
         height: 50px;
-        span:nth-child(2) {
-          font-size: 16px;
+        display: flex;
+        .aside{
+          width: 30px;
+          display: flex;
+          align-items: flex-start;
+          align-items: center;
         }
-        span:last-child {
-          float: right;
+        .right{
+          width: 100%;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        }
+        img{
+          width: 20px;
+          height: 20px;
         }
       }
-    }
-    img {
-      width: 20px;
-      height: 20px;
-      margin-top: -4px;
     }
   }
 }

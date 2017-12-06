@@ -3,6 +3,9 @@ export const RECORD_USERINFO = 'RECORD_USERINFO'
 export const GET_USERINFO = 'GET_USERINFO'
 export const RECORD_LOGININFO = 'RECORD_LOGININFO'
 export const LOGOUT = 'LOGOUT'
+export const ORDER_DETAILS_UUID = 'ORDER_DETAILS_UUID'
+export const SAVE_DELIVERY = 'SAVE_DELIVERY'
+
 import {setStore,getStore,setCookie,getCookie,delCookie} from '../config/utils.js'
 
 export default{
@@ -29,5 +32,21 @@ export default{
 	[LOGOUT](state){
 		state.userInfo = null,
 		state.login = false;
-	}
+	},
+	// 订单详情页orderuuid,dealuuid
+	[ORDER_DETAILS_UUID](state, {
+		orderuuid,
+		dealuuid
+	}){
+		state.orderuuid = orderuuid;
+		state.dealuuid = dealuuid
+	},
+	// 物流详情
+	[SAVE_DELIVERY](state, {
+		company,
+		postid
+	}){
+		state.delivery_company = company;
+		state.delivery_postid = postid
+	},
 }

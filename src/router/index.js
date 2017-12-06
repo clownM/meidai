@@ -8,6 +8,8 @@ const mymeidai = r => require.ensure([], () => r(require('@/pages/mymeidai/mymei
 const userInfo = r => require.ensure([], () => r(require('@/pages/userInfo/userInfo')), 'userInfo')
 const newPwd = r => require.ensure([], () => r(require('@/pages/newPwd/newPwd')), 'newPwd')
 const switchUser = r => require.ensure([], () => r(require('@/pages/switchUser/switchUser')), 'switchUser')
+const delivery = r => require.ensure([], () => r(require('@/pages/delivery/delivery')), 'delivery')
+const orderDetails = r => require.ensure([], () => r(require('@/pages/orderlist/children/orderDetails')), 'orderDetails')
 
 export default [{
     path:'/',
@@ -58,7 +60,18 @@ export default [{
         {
             path: '/orderlist',
             name:'orderlist',
-            component: orderlist
+            component: orderlist,
+            children:[{
+                path:'orderDetails',
+                name:'orderDetails',
+                component: orderDetails
+            }]
+        },
+        // 物流详情
+        {
+            path: '/delivery',
+            name: 'delivery',
+            component: delivery
         },
         //登录注册
         {

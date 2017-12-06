@@ -4,69 +4,69 @@
         <div class="ullist">
             <ul>
                 <li>
-                    <router-link to="/">
-                        <span>
+                    <router-link to="/" class='router-link'>
+                        <div class='aside'>
                             <img src="../../images/icons/我的.png" alt="">
-                        </span>
-                        <span>{{ username }}</span>
-                        <span>
+                        </div>
+                        <div class="right">
+                            <span>{{ username }}</span>
                             <img src="../../images/icons/向右.png" alt="">
-                        </span>
+                        </div>
                     </router-link>
                 </li>
                 <li>
-                    <router-link to="/">
-                        <span>
+                    <router-link to="/" class='router-link'>
+                        <div class='aside'>
                             <img src="../../images/icons/phone.png" alt="">
-                        </span>
-                        <span>{{ phone }}</span>
-                        <span>
+                        </div>
+                        <div class="right">
+                            <span>{{ phone }}</span>
                             <img src="../../images/icons/向右.png" alt="">
-                        </span>
+                        </div>
                     </router-link>
                 </li>
                 <li>
-                    <router-link to="/">
-                        <span>
+                    <router-link to="/" class='router-link'>
+                        <div class=''aside>
                             <img src="../../images/icons/性别.png" alt="">
-                        </span>
-                        <span>{{ gender }}</span>
-                        <span>
+                        </div>
+                        <div class="right">
+                            <span>{{ gender }}</span>
                             <img src="../../images/icons/向右.png" alt="">
-                        </span>
+                        </div>
                     </router-link>
                 </li>
                 <li>
-                    <router-link to="/">
-                        <span>
+                    <router-link to="/" class='router-link'>
+                        <div class='right'>
                             <img src="../../images/icons/生日.png" alt="">
-                        </span>
-                        <span>{{ birthday }}</span>
-                        <span>
+                        </div>
+                        <div class='right'>
+                            <span>{{ birthday }}</span>
                             <img src="../../images/icons/向右.png" alt="">
-                        </span>
+                        </div>
                     </router-link>
                 </li>
                 <li>
-                    <router-link to="/switchUser">
-                        <span>
+                    <router-link to="/switchUser" class='router-link'>
+                        <div class='aside'>
                             <img src="../../images/icons/group_fill.png" alt="">
-                        </span>
-                        <span>切换关联用户</span>
-                        <span>
+                        </div>
+                        <div class='right'>
+                            <span>切换关联用户</span>
                             <img src="../../images/icons/向右.png" alt="">
-                        </span>
+                        </div>
                     </router-link>
                 </li>
                 <li>
-                    <router-link to="/newPwd">
-                        <span>
+                    <router-link to="/newPwd" class='router-link'>
+                        <div class='aside'>
                             <img src="../../images/icons/lock.png" alt="">
-                        </span>
-                        <span>修改登录密码</span>
-                        <span>
+                        </div>
+                        <div class='right'>
+                            <span>修改登录密码</span>
                             <img src="../../images/icons/向右.png" alt="">
-                        </span>
+                        </div>
                     </router-link>
                 </li>
             </ul>
@@ -105,11 +105,11 @@ export default{
         ...mapMutations([
             'LOGOUT'
         ]),
-        initData(){
-            if(!userInfo){
+        initData(){                             
+            if(!this.userInfo){
                 this.$store.dispatch('getUserInfo')
             }
-            this.username = this.userInfo.username || '暂无用户名';
+            this.username = this.userInfo.username;
             this.phone = this.userInfo.phone;
             this.gender = this.userInfo.gender;
             this.birthday = this.userInfo.birthday;
@@ -117,7 +117,7 @@ export default{
         async logout(){
             this.LOGOUT();
             delCookie('UserUUID');
-            this.$router.go(-1);
+            this.$router.push('/login')
         }
     },
 
@@ -147,21 +147,26 @@ export default{
                     background-color: #fff;
                     border-bottom: 1px solid rgb(240, 240, 240);
                     padding: 0 10px;
-                    a{
-                        display: block;
+                    .router-link{
                         width: 100%;
                         height: 50px;
-                        span:nth-child(2){
-                            font-size: 16px
+                        display: flex;
+                        .aside{
+                            width: 30px;
+                            display: flex;
+                            align-items: flex-start;
+                            align-items: center;
                         }
-                        span:last-child{
-                            float:right
+                        .right{
+                            width: 100%;
+                            display: flex;
+                            justify-content: space-between;
+                            align-items: center;
                         }
-                    }
-                    img{
-                        width: 20px;
-                        height: 20px;
-                        margin-top: -4px;
+                        img{
+                            width: 20px;
+                            height: 20px;
+                        }
                     }
                 }
             }

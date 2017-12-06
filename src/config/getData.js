@@ -48,8 +48,6 @@ export const queryUser =() => ajax({
 	dataType:'JSON',
 })
 
-
-
 /**
  * 修改密码
  */
@@ -62,4 +60,56 @@ export const changePassword = (uuid, oldpwd, newpwd) => ajax({
 		password:newpwd
 	},
 	dataType:'JSON'
+})
+
+// 查询order
+export const queryOrder = (orderuuid) => ajax({
+	url:'/order',
+	data:{
+		action: 'query',
+		uuid: orderuuid,
+		createdate:'',
+		head:'',
+		config:'',
+		genobj:'',
+		deals:'',
+		station:'',
+		appointmentdate:'',
+		scandate:'',
+		pinfo:'',
+		status:'',
+		preconfig:'',
+		collecteddate:''
+	}
+})
+// 取消order预约
+export const cancelOrder = (orderuuid) => ajax({
+	url:'/order',
+	data:{
+		action:'cancel',
+		uuid:orderuuid
+	}
+})
+//查询deal
+export const queryDeal = (dealuuid) => ajax({
+	url:'/deal',
+	data:{
+		action:'query',
+		uuid:dealuuid,
+		createdate:'',
+		config:'',
+		genprint:'',
+		owneruuid:'',
+		price: "",
+		status: "",
+		owneruuid: "",
+		config_literal: "",
+		printdate: "",
+		delivery: "",
+		deliverydate: "",
+		acceptdate: "",
+		params: '',
+		paymentstatus: '',
+		discount: ''
+	}
 })

@@ -22,21 +22,21 @@ const router = new VueRouter({
 });
 
 // 导航守卫
-// router.beforeEach((to,from,next) => {
-//   const nextRoute = ['/mymeidai/userInfo','/newPwd','/switchUser','/orderlist'];
-//   let UserUUID = getCookie('UserUUID');
-//   if(nextRoute.indexOf(to.path) >= 0){
-//     if(!UserUUID){
-//       router.push({path:'/login'});
-//     }
-//   }
-//   if(to.name === 'login'){
-//     if(UserUUID){
-//       router.push({path:'/mymeidai'});
-//     }
-//   }
-//   next();
-// });
+router.beforeEach((to,from,next) => {
+  const nextRoute = ['/mymeidai/userInfo','/newPwd','/switchUser','/orderlist'];
+  let UserUUID = getCookie('UserUUID');
+  if(nextRoute.indexOf(to.path) >= 0){
+    if(!UserUUID){
+      router.push({path:'/login'});
+    }
+  }
+  if(to.name === 'login'){
+    if(UserUUID){
+      router.push({path:'/mymeidai'});
+    }
+  }
+  next();
+});
 
 
 new Vue({

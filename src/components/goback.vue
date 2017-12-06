@@ -1,9 +1,7 @@
 <template>
     <div class="top-fixed">
         <div class="go-back" @click="$router.go(-1)">
-            <span class="icon-back">
-                <img src="../images/icons/向左.png" alt="">
-            </span>
+            <img src="../images/icons/向左.png" alt="" class='icon-back'>
             <p>{{ title }}</p>
         </div>
     </div>
@@ -29,7 +27,7 @@
   top: 0;
   background-color: #fff;
   border-bottom: 1px solid rgb(240, 240, 240);
-  z-index: 9999;
+  z-index: 100;
 }
 
 div.go-back {
@@ -45,10 +43,6 @@ div.go-back {
     margin-top: 15px;
     margin-left: 10px;
     margin-right: 10px;
-      img{
-          width: 100%;
-          height: 100%;
-      }
   }
 }
 </style>
