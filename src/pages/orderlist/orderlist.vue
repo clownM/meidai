@@ -364,7 +364,7 @@ import goback from "@/components/goback";
 import {mapState,mapMutations} from 'vuex';
 import { queryOrder,cancelOrder,queryDeal } from "@/config/getData"
 import {formatDate,getStatus} from '../../config/fswear'
-import {getCookie} from '../../config/utils'
+import {getCookie,setSessionStore} from '../../config/utils'
 export default {
   data() {
     return {
@@ -392,7 +392,8 @@ export default {
   },
   methods: {
     ...mapMutations([
-        'ORDER_DETAILS_UUID',
+        'ORDEROBJ',
+        'DEALOBJ',
         'SAVE_DELIVERY'
     ]),
     async initData() {
@@ -518,13 +519,21 @@ export default {
         }
     },
     // 订单详情
-    toOrderDetails(orderuuid,dealuuid){
-        this.ORDER_DETAILS_UUID({orderuuid:orderuuid,dealuuid:dealuuid});
+    async toOrderDetails(orderuuid,dealuuid){
+        let orderobj = await queryOrder(orderuuid);
+        let dealobj = await queryDeal(dealuuid);
+        this.ORDEROBJ(orderobj);
+        this.DEALOBJ(dealobj);
+        setSessionStore('orderuuid',orderuuid);
+        setSessionStore('dealuuid',dealuuid);
+        setSessionStore('orderobj',orderobj);
         this.$router.push('/orderlist/orderDetails');
     },
     //查看物流
     toDelivery(company,postid){
-        this.SAVE_DELIVERY({company:company,postid,postid});
+        this.SAVE_DELIVERY({company:company,postid:postid});
+        setSessionStore('delivery_company',company);
+        setSessionStore('delivery_postid',postid)
         this.$router.push('/delivery')
     }
   },

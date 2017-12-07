@@ -79,7 +79,7 @@ export const queryOrder = (orderuuid) => ajax({
 		pinfo:'',
 		status:'',
 		preconfig:'',
-		collecteddate:''
+		collecteddata:''
 	}
 })
 // 取消order预约
@@ -111,5 +111,33 @@ export const queryDeal = (dealuuid) => ajax({
 		params: '',
 		paymentstatus: '',
 		discount: ''
+	}
+})
+//快递查询
+export const queryDelivery = (company,postid) => ajax({
+	url:'/express',
+	data:{
+		action:'query',
+		company:company,
+		postid:postid
+	}
+})
+//
+export const loadConfigData = (uuid) => ajax({
+	url:'/data',
+	data:{
+		action:'download',
+		type: 'config',
+		Chunk: '0',
+		uuid:uuid
+	}
+})
+
+export const loadParamsData = (uuid) => ajax({
+	url:'/data',
+	data:{
+		action: 'download',
+		type: 'params',
+		uuid:uuid
 	}
 })

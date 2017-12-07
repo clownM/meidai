@@ -48,7 +48,7 @@ export default async function ajax(obj){
 					if (obj.success){
 				        obj.success(xhr.responseText);
 				    }
-					let result = xhr.responseText;
+					let result = xhr.response;
 					if(typeof result !== 'object'){
 						result = JSON.parse(result);
 					}

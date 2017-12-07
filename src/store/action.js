@@ -1,9 +1,11 @@
 import {
-	queryUser,
+	queryUser, queryOrder,queryDeal
 } from '../config/getData'
 import {
-	GET_USERINFO,
+	GET_USERINFO,GET_ORDEROBJ,GET_DEALOBJ
 } from './mutations.js'
+
+import {getSessionStore} from '../config/utils'
 
 export default {
 	async getUserInfo({
@@ -13,14 +15,20 @@ export default {
 		let res = await queryUser();
 		commit(GET_USERINFO, res)
 	},
-	// async saveAddress({
-	// 	commit,
-	// 	state
-	// }) {
-
-	// 	if(state.removeAddress.length > 0) return;
-
-	// 	let addres = await getAddressList(state.userInfo.user_id);
-	// 	commit(SAVE_ADDRESS, addres);	
-	// },
+	async getOrderObj({
+		commit,
+		state
+	}) {
+		let orderuuid = getSessionStore('orderuuid');
+		let res = await queryOrder(orderuuid);
+		commit(GET_ORDEROBJ,res)
+	},
+	async getDealObj({
+		commit,
+		state
+	}) {
+		let dealuuid = getSessionStore('dealuuid');
+		let res = await queryDeal(dealuuid);
+		commit(GET_DEALOBJ,res)
+	}
 }

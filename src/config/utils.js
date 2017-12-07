@@ -25,6 +25,19 @@ export const removeStore = name => {
    window.localStorage.removeItem(name);
 }
 
+/* 存储sessionStore */
+export const setSessionStore = (name,content) => {
+    if(!name) return;
+    if (typeof content !== 'string') {
+        content = JSON.stringify(content);
+    }
+    window.sessionStorage.setItem(name, content);
+}
+/* 获取sessionStore */
+export const getSessionStore = name => {
+    if (!name) return;
+    return window.sessionStorage.getItem(name);
+}
 /**
  * 存储cookie
  */ 
