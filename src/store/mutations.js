@@ -24,7 +24,7 @@ export default{
 		if (state.userInfo && (state.userInfo.uuid !== getCookie('UserUUID'))) {
 			return;
 		};
-		if (info.result) {
+		if (info.result == 'true') {
 			state.userInfo = {...info};
 		} else {
 			state.userInfo = null;
@@ -46,11 +46,12 @@ export default{
 	},
 	//获取存入vuex
 	[GET_ORDEROBJ](state,info){
-		if(info.result) {
-			state.orderObj = info
-		}else{
-			state.orderObj = null
-		}
+		state.orderObj = {...info};
+		// if(info.result == 'true') {
+		// 	state.orderObj = {...info}
+		// }else{
+		// 	state.orderObj = null
+		// }
 	},
 	[GET_DEALOBJ](state,info){
 		if(state.dealObj){

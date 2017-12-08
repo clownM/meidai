@@ -1,5 +1,7 @@
 
 import {loadConfigData,loadParamsData} from './getData'
+import $ from 'jquery'
+import ajax from './ajax';
 
 //RFC2822格式 日期格式化
 export const joinzero = (num) => {
@@ -37,16 +39,13 @@ export const formatDate = (date,format) => {
 // 获取订单状态
 export const getStatus = (parm) => {
     let _status;
-    switch (parm1) {
+    switch (parm) {
         case "toconfirm":
             _status = "扫描未检查";
             break;
         case "toscan":
             _status = "等待扫描";
             break;
-        // case "todeal":
-        //     _status = "确认";
-        //     break;
         case "cancelled":
             _status = "已取消";
             break;
@@ -154,22 +153,19 @@ export const get_glass_data = async orderobj => {
             glass_config_data[i] = tmp_preconfig_data[i];
         }
     }
-    console.log(orderobj.status);
-    // let configuuid = orderobj.config[0];
-    if(configuuid != ''){
+    let configuuid = orderobj.config[0];
+    if(typeof configuuid != 'undefined'){
         let res = await loadConfigData(configuuid);
-        console.log(res);
         if(res && res.result != 'false'){
             let config_json = configToJson(res);
-            console.log(config_json);
             for(let i in config_json){
                 glass_config_data[i] = config_json[i];
             }
-
         }
     }
     let paramsuuid = orderobj.params;
-    if(paramsuuid != ''){
+
+    if(typeof paramsuuid != 'undefined'){
         let res2 = await loadParamsData(paramsuuid);
         if (JSON.parse(res2) && JSON.parse(res2).result != 'false' && res2 != '') {
             let tmp_params = JSON.parse(res2);
@@ -202,7 +198,6 @@ export const get_glass_data = async orderobj => {
     /**
      * 眼镜的框镜型
      **/
-    console.log(glass_config_data.LensProfileFile)
     if (!glass_config_data.LensProfileFile) {
         let tmp_lensprofilefile_img = '{"top":"100","left":"100"}';
         resobj.lensprofilefile = '';
@@ -247,8 +242,6 @@ export const get_glass_data = async orderobj => {
     resobj.slotMessage = isOwnEmpty(glass_config_data, 'SlotMessage');
     /****** 镜腿 ******/
     resobj.legMessage = isOwnEmpty(glass_config_data, 'LegMessage');
-    
-    console.log(glass_config_data,glass_collecteddata_data);
 
     return resobj;
 }

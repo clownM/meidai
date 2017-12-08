@@ -130,7 +130,8 @@ export const loadConfigData = (uuid) => ajax({
 		type: 'config',
 		Chunk: '0',
 		uuid:uuid
-	}
+	},
+	dataType:'text'
 })
 
 export const loadParamsData = (uuid) => ajax({

@@ -45,12 +45,16 @@ export default async function ajax(obj){
 		xhr.onreadystatechange = function (){
 			if (xhr.readyState == 4){
 				if (xhr.status == 200){
-					if (obj.success){
-				        obj.success(xhr.responseText);
-				    }
+					// if (obj.success){
+				    //     obj.success(xhr.responseText);
+				    // }
 					let result = xhr.response;
-					if(typeof result !== 'object'){
-						result = JSON.parse(result);
+					if(obj.dataType == 'text'){
+						result = xhr.responseText;
+					}else{
+						if(typeof result !== 'object'){
+							result = JSON.parse(result);
+						}
 					}
 					resolve(result);
 				}else{

@@ -9,7 +9,7 @@ Vue.use(Vuex)
 const state = {
 	login: false,//是否登录
 	userInfo: null, //用户信息
-	ordeObj:null,//订单详情页order
+	orderObj:null,//订单详情页order
 	dealObj:null,//订单详情页deal
 	delivery_company:null,//物流公司
 	delivery_postid:null,//物流单号

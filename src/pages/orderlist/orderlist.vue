@@ -526,7 +526,6 @@ export default {
         this.DEALOBJ(dealobj);
         setSessionStore('orderuuid',orderuuid);
         setSessionStore('dealuuid',dealuuid);
-        setSessionStore('orderobj',orderobj);
         this.$router.push('/orderlist/orderDetails');
     },
     //查看物流
