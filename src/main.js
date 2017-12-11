@@ -5,6 +5,7 @@ import store from './store/';
 import FastClick from 'fastclick'
 import {routerMode} from './config/env'
 import {getCookie} from './config/utils'
+import AMap from 'vue-amap'
 
 if ('addEventListener' in document) {
     document.addEventListener('DOMContentLoaded', function() {
@@ -14,16 +15,24 @@ if ('addEventListener' in document) {
 
 
 Vue.use(VueRouter);
-
+Vue.use(AMap);
 
 const router = new VueRouter({
   routes,
   mode:routerMode
 });
 
+//初始化vue-amap
+AMap.initAMapApiLoader({  
+  // 申请的高德key  
+  key: '6282c8655ddc6d8cf5eeb8b43e1fc347',  
+  // 插件集合  
+  plugin: ['AMap.PlaceSearch', 'AMap.Geolocation','AMap.OverView','AMap.Scale','AMap.ToorBar','AMap.MapType']  
+});  
+
 // 导航守卫
 router.beforeEach((to,from,next) => {
-  const nextRoute = ['/mymeidai/userInfo','/newPwd','/switchUser','/orderlist'];
+  const nextRoute = ['/userInfo','/newPwd','/switchUser','/orderlist'];
   let UserUUID = getCookie('UserUUID');
   if(nextRoute.indexOf(to.path) >= 0){
     if(!UserUUID){

@@ -1,6 +1,6 @@
 <template>
-    <div class="mall-page">
-        <p>商城首页</p>
+    <div class="home-page">
+        <p>美戴官网</p>
         <tabs></tabs>
     </div>
 </template>
@@ -17,7 +17,7 @@ export default {
 </script>
 <style lang="scss" scoped>
     @import '../../style/common.scss';
-    div.mall-page{
+    div.home-page{
         text-align: center;
         padding-top: 100px;
     }

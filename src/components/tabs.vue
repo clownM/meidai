@@ -1,7 +1,7 @@
 <template>
     <div class="user_tabs">
         <div class="user_tabs_wrap">
-            <div class="user_tabs_tab" id="meidaitech" @click="gotoMeidai()">
+            <div class="user_tabs_tab" id="meidaitech" @click="gotoAddress('/home')">
                 <img src="../images/icons/首页.png" alt="" class="tab_icon">
                 <!-- <div class="icon"></div> -->
                 <div>主页</div>
@@ -41,9 +41,9 @@
         	gotoAddress(path){
         		this.$router.push(path)
             },
-            gotoMeidai(){
-                window.location.href = 'https://www.meidaitech.com';
-            }
+            // gotoMeidai(){
+            //     window.location.href = 'https://www.meidaitech.com';
+            // }
         },
     }
 </script>

@@ -3,26 +3,31 @@
       <goback title='订单详情'></goback>
       <div class="orderdetails">
           <div class="status">
-                <template v-if="delivery_state != ''">
-                        <span v-text="delivery_state"></span>
+                <template v-if="dely_state != ''">
+                        <span v-text="dely_state"></span>
                 </template>
                 <template v-else>
                     <span v-text=" orderstatus">{{ orderstatus }}</span>
                 </template>
             </div>
             <div class="wuliu">
-                <div class="wuliu-top">
-                    <span v-text="delivery_postid"></span>
-                    <span v-text="delivery_company"></span>
+                <div v-if='wuliuInfo'>
+                    <div class="wuliu-top">
+                        <span v-text="dely_postid"></span>
+                        <span v-text="dely_company"></span>
+                    </div>
+                    <p v-text="dely_context" class="delivery_context"></p>
+                    <p v-text="dely_date"></p>
                 </div>
-                <p v-text="delivery_context" class="delivery_context"></p>
-                <p v-text="delivery_date"></p>
+                <div v-else class='wuliuNone'>
+                    暂无物流信息
+                </div>
             </div>
             <div class="userinfo">
                 |-----收货人信息-----|
             </div>
             <div class="shop">{{ station }} </div>
-            <div class="orderinfo">
+            <div class="orderinfo clear">
                 <!--startprint-->
                 <div id="printPage">
                     <table>
@@ -112,8 +117,7 @@
                     </table>
                 </div>
                 <!--endprint-->
-                <button id="print">打印</button>
-                <div id="clearBoth"></div>
+                <button id="print" v-if='isPC'>打印</button>
             </div>
 
 
@@ -134,8 +138,8 @@
     import goback from '../../../components/goback'
     import {mapState,mapMutations} from 'vuex'
     import {getSessionStore} from '../../../config/utils'
-    import {get_glass_data,formatDate,getStatus} from '../../../config/fswear'
-    import {queryOrder,queryDeal} from '../../../config/getData'
+    import {get_glass_data,formatDate,getStatus,get_delivery_status} from '../../../config/fswear'
+    import {queryOrder,queryDeal,queryDelivery} from '../../../config/getData'
     export default{
         data(){
             return{
@@ -164,16 +168,19 @@
 
                 price: "", //价格
 
-                delivery_state: "",
-                delivery_company: "", //快递公司
-                delivery_postid: "", //快递单号
-                delivery_context: "", //最近一条快递内容
-                delivery_date: "", //最近一条快递时间
+                wuliuInfo:true,
+                dely_state: "",
+                dely_company: "", //快递公司
+                dely_postid: "", //快递单号
+                dely_context: "", //最近一条快递内容
+                dely_date: "", //最近一条快递时间
 
                 orderuuid: "",
                 orderCreatedate: "", //订单创建时间
                 dealuuid: "",
                 dealCreatedate: "",
+
+                isPC:false
                 
             }
         },
@@ -189,6 +196,9 @@
             ])
         },
         methods:{
+            ...mapMutations([
+                'SAVE_DELIVERY'
+            ]),
             async initData(){
                 if (!this.orderObj) {
                     await this.$store.dispatch('getOrderObj');
@@ -201,7 +211,7 @@
                 if(paymentstatus == 'topay'){
                     this.orderstatus = '待支付';
                 }else{
-                    this.orderstatus = getStatus(this.orderObj.status);
+                    this.orderstatus = getStatus(this.dealObj.status);
                 }
 
                 this.station = this.orderObj.station;
@@ -224,7 +234,7 @@
                     this.legMessage2 = res.legMessage2;
                     this.legMessage3 = res.legMessage3;
 
-                    this.price = res.price;
+                    this.price = res.price || 0;
                 }
 
                 this.orderuuid = getSessionStore('orderuuid');
@@ -232,7 +242,31 @@
                 this.orderCreatedate = formatDate(this.orderObj.createdate,'long') ;
                 this.dealCreatedate = formatDate(this.dealObj.createdate,'long');
 
-
+                let _delivery = this.dealObj.delivery,
+                    _company = '',
+                    _postid = '';
+                if(_delivery != ''){
+                    this.wuliuInfo = true;
+                    _delivery = JSON.parse(_delivery);
+                    if (_delivery.postprocessing_delivery == undefined) {
+                        _company = _delivery.production_delivery.courier_company;
+                        _postid = _delivery.production_delivery.courier_number;
+                    } else {
+                        _company = _delivery.postprocessing_delivery.courier_company;
+                        _postid = _delivery.postprocessing_delivery.courier_number;
+                    }
+                    let res2 = await queryDelivery(_company,_postid)
+                    this.wuliuInfo = true;
+                    res2 = JSON.parse(res2.express);
+                    this.dely_state = get_delivery_status(res2.state);
+                    let datas = res2.data;
+                    this.dely_company = _company;
+                    this.dely_postid = _postid;
+                    this.dely_context = datas[0].context;
+                    this.dely_date = datas[0].time;
+                }else{
+                    this.wuliuInfo = false;
+                }
             }
         },
         watch: {
@@ -286,6 +320,10 @@
                 p.delivery_context{
                     font-size: 20px;
                 }
+                .wuliuNone{
+                    text-align: center;
+                    line-height: 40px;
+                }
             }
             .userinfo {
                 width: 100%;
@@ -308,6 +346,9 @@
                 table{
                     width: 100%;
                     border-collapse: collapse;
+                    caption{
+                        text-align: left;
+                    }
                     tr{
                         width: 100%;
                         height: 50px;

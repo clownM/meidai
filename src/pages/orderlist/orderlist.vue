@@ -36,7 +36,7 @@
                             </div>
                             <div class="order-body">
                                 <div class="orderno">订单编号：
-                                    <span v-text="order.orderno"></span>
+                                    <span v-text="order.orderuuid"></span>
                                 </div>
                                 <div class="createdate">订单创建时间:
                                     <span v-text="order.createdate"></span>

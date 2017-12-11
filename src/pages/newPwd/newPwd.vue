@@ -20,8 +20,8 @@
 <script>
     import goback from '../../components/goback'
     import {changePassword} from '../../config/getData'
-    import {mapState} from 'vuex'
-    import {getCookie} from '../../config/utils'
+    import {mapState,mapMutations} from 'vuex'
+    import {getCookie,delCookie} from '../../config/utils'
     export default{
         data(){
             return{
@@ -39,10 +39,11 @@
             ])
         },
         methods:{
+            ...mapMutations([
+                'LOGOUT'
+            ]),
             async submit(){
-                if(!this.userInfo){
-                    this.$store.dispatch('getUserInfo')
-                }
+                let useruuid = getCookie('UserUUID');
                 if(this.oldpwd === ''){
                     alert('请输入旧密码！');
                 }else{
@@ -52,11 +53,13 @@
                         if(this.newpwd1 !== this.newpwd2){
                             alert('两次输入密码不一致');
                         }else{
-                            let res = await changePassword(this.userInfo.uuid,oldpwd,newpwd1);
+                            let res = await changePassword(useruuid,this.oldpwd,this.newpwd1);
                             if(res){
                                 if(res.result == 'true'){
                                     alert('修改成功');
-
+                                    this.LOGOUT();
+                                    delCookie('UserUUID');
+                                    this.$router.push('/login')
                                 }else{
                                     alert(res.reasons);
                                 }
@@ -71,7 +74,7 @@
 <style lang='scss'>
     @import '../../style/common';
     @import '../../style/fswear';
-    .mt50{
+    .mt50px{
         width: 100%;
         padding: 5px 10px;
         background-color: #fff;

@@ -1,5 +1,5 @@
 <template>
-    <div class='container'>
+    <div class='cart-page'>
         <p>购物车</p> 
         <tabs></tabs>
     </div>
@@ -13,7 +13,7 @@
     }
 </script>
 <style>
-    .container{
+    .cart-page{
         text-align: center;
         padding-top: 100px;
     }

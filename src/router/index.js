@@ -1,6 +1,7 @@
 import App from '../App'
 
 const login = r => require.ensure([], () => r(require('@/pages/login/login')), 'login')
+const home = r => require.ensure([], () => r(require('@/pages/home/home')), 'home')
 const mall = r => require.ensure([], () => r(require('@/pages/mall/mall')), 'mall')
 const shoppingCart = r => require.ensure([], () => r(require('@/pages/shoppingCart/shoppingCart')), 'shoppingCart')
 const orderlist = r => require.ensure([], () => r(require('@/pages/orderlist/orderlist')), 'orderlist')
@@ -19,6 +20,12 @@ export default [{
         {
             path: '',
             redirect: '/mall'
+        },
+        {
+            //官网主页
+            path:'/home',
+            name:'home',
+            comment:home
         },
         //商城页
         {

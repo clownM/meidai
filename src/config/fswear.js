@@ -72,26 +72,27 @@ export const get_delivery_status = status => {
     let _status;
     switch(status){
         case '0':
-            delivery_state = '运输中';
+            _status = '运输中';
             break;
         case '1':
-            delivery_state = '揽件中';
+            _status = '揽件中';
             break;
         case '2':
-            delivery_state = '疑难';
+            _status = '疑难';
             break;
         case '3':
-            delivery_state = '已签收';
+            _status = '已签收';
             break;
         case '4':
-            delivery_state = '退签';
+            _status = '退签';
             break;
         case '5':
-            delivery_state = '派件中';
+            _status = '派件中';
             break;
         default:
-            delivery_state = '没有快递信息';
+            _status = '没有快递信息';
     }
+    return _status;
 }
 
 export const get_glass_data = async orderobj => {
