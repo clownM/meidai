@@ -8,6 +8,7 @@ export const DEALOBJ = 'DEALOBJ'
 export const GET_ORDEROBJ = 'GET_ORDEROBJ'
 export const GET_DEALOBJ = 'GET_DEALOBJ'
 export const SAVE_DELIVERY = 'SAVE_DELIVERY'
+export const RESET_USERNAME = 'RESET_USERNAME'
 
 import {setStore,getStore,setCookie,getCookie,delCookie} from '../config/utils.js'
 
@@ -71,5 +72,10 @@ export default{
 	}){
 		state.delivery_company = company;
 		state.delivery_postid = postid
+	},
+
+	//修改用户名
+	[RESET_USERNAME](state,username) {
+		state.userInfo = Object.assign({}, state.userInfo,{username})
 	},
 }

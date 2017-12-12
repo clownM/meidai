@@ -62,6 +62,16 @@ export const changePassword = (uuid, oldpwd, newpwd) => ajax({
 	dataType:'JSON'
 })
 
+//修改用户名
+export const newUsername = (uuid,username) => ajax({
+	url:'/user',
+	data:{
+		action: 'update',
+		uuid:uuid,
+		username:username
+	}
+})
+
 // 查询order
 export const queryOrder = (orderuuid) => ajax({
 	url:'/order',
@@ -122,7 +132,7 @@ export const queryDelivery = (company,postid) => ajax({
 		postid:postid
 	}
 })
-//
+//configData
 export const loadConfigData = (uuid) => ajax({
 	url:'/data',
 	data:{
@@ -133,12 +143,34 @@ export const loadConfigData = (uuid) => ajax({
 	},
 	dataType:'text'
 })
-
+//paramsData
 export const loadParamsData = (uuid) => ajax({
 	url:'/data',
 	data:{
 		action: 'download',
 		type: 'params',
 		uuid:uuid
+	}
+})
+
+//frame_profiles
+export const listFrameProfiles = () => ajax({
+	url:'/common',
+	data:{
+		action:'list',
+		type:'frame_profiles',
+	}
+})
+export const queryFrameProfiles = (uuid) => ajax({
+	url:'/common',
+	data:{
+		action:'query',
+		type:'frame_profiles',
+		uuid:uuid,
+		content:'',
+		description:'',
+		dataform:'',
+		count:'',
+		createdate:''
 	}
 })

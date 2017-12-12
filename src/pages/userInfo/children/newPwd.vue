@@ -1,5 +1,5 @@
 <template>
-    <div class='container-absolute'>
+    <div class='newPwd-page'>
         <goback title='修改密码'></goback>
         <div class="mt50px">
             <div class='section'>
@@ -12,16 +12,16 @@
                 <input type="password" placeholder="请确认新密码" v-model="newpwd2" class='inputarea'>
             </div>
         </div>
-        <div class="divbtn">
+        <div class="btn-wrap-app">
             <button @click="submit" class='btn-red-large'>确认提交</button>
         </div>
     </div>
 </template>
 <script>
-    import goback from '../../components/goback'
-    import {changePassword} from '../../config/getData'
+    import goback from '../../../components/goback'
+    import {changePassword} from '../../../config/getData'
     import {mapState,mapMutations} from 'vuex'
-    import {getCookie,delCookie} from '../../config/utils'
+    import {getCookie,delCookie} from '../../../config/utils'
     export default{
         data(){
             return{
@@ -72,8 +72,20 @@
     }
 </script>
 <style lang='scss'>
-    @import '../../style/common';
-    @import '../../style/fswear';
+@import '../../../style/common';
+@import '../../../style/fswear';
+    .newPwd-page{
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #f5f5f5;
+        z-index: 101;
+        padding-top: 60px;
+        height: 100%;
+        overflow: auto;
+    }
     .mt50px{
         width: 100%;
         padding: 5px 10px;
@@ -97,17 +109,6 @@
         }
         .section:first-child{
             border-top: none;
-        }
-    }
-    .divbtn{
-        width: 100%;
-        padding: 20px 10px;
-        .btn-red-large{
-            width: 100%;
-            height: 50px;
-            border-radius: 5px;
-            color: #fff;
-            background-color: rgb(255, 90, 90)
         }
     }
 </style>

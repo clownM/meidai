@@ -1,5 +1,5 @@
 <template>
-    <div class="mycontainer">
+    <div class="mymeidai-page">
         <toptitle title='我的美戴'></toptitle>
         <div  class="userInfo router-link" id="userinfo" @click="$router.push('/userInfo')">
             <div class="avatar" id="avatar">
@@ -56,7 +56,7 @@ export default{
       return{
         username:'登录/注册',
         avatar:'../../images/touxiang.png',
-        phone:''
+        phone:null
       }
     },
     mounted(){
@@ -72,18 +72,19 @@ export default{
     },
     methods:{
       initData(){
-        if(getCookie('UserUUID')){
-          if(!this.userInfo){
-            this.$store.dispatch('getUserInfo');
-          }
-          this.username = this.userInfo.username || '暂无用户名';
-          this.phone = this.userInfo.phone;
+        if(!this.userInfo){
+          this.$store.dispatch('getUserInfo');
         }
+        this.username = this.userInfo.username || '暂无用户名';
+        this.phone = this.userInfo.phone;
       }
     },
     watch: {
         userInfo: function (value){
-            this.initData()
+           if(value){
+              this.username = this.userInfo.username || '暂无用户名';
+              this.phone = this.userInfo.phone;
+           }
         }
     }
 }

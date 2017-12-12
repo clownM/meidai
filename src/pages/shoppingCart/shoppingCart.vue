@@ -12,7 +12,8 @@
         }
     }
 </script>
-<style>
+<style lang='scss'>
+@import '../../style/common';
     .cart-page{
         text-align: center;
         padding-top: 100px;

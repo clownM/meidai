@@ -546,6 +546,7 @@ export default {
 
 <style lang='scss'>
 @import "../../style/common";
+@import '../../style/fswear';
 .tabs-head {
   width: 100%;
   height: 50px;
@@ -662,13 +663,5 @@ export default {
 }
 .tabs-contents {
   position: relative;
-}
-
-.router-slid-enter-active, .router-slid-leave-active {
-        transition: all .4s;
-    }
-.router-slid-enter, .router-slid-leave-active {
-    transform: translate3d(2rem, 0, 0);
-    opacity: 0;
 }
 </style>

@@ -17,7 +17,7 @@ export default {
 </script>
 <style lang="scss" scoped>
     @import '../../style/common.scss';
-    div.home-page{
+    .home-page{
         text-align: center;
         padding-top: 100px;
     }
