@@ -4,9 +4,9 @@
         <section>
             <input type="text" v-model='username'>
         </section>
-        <section class='btn-wrap-app'>
+        <div class='btn-wrap-app'>
             <button @click="submit">确认修改</button>
-        </section>
+        </div>
     </div>
 </template>
 <script>

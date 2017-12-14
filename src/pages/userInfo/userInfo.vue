@@ -68,9 +68,9 @@
                 </div>
             </router-link>
         </section>
-        <section class='btn-wrap-app'>
+        <div class='btn-wrap-app'>
             <button @click="logout">退出登录</button>
-        </section>
+        </div>
         <transition name="router-slid" mode="out-in">
             <router-view></router-view>
         </transition>
@@ -90,7 +90,9 @@ export default{
       }
     },
     mounted(){
-      this.initData();
+        this.initData();
+        this.$router.go(0);
+
     },
     components:{
         goback

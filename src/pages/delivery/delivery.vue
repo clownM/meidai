@@ -45,7 +45,6 @@
                 let res = await queryDelivery(this.delivery_company,this.delivery_postid);
                 res = JSON.parse(res.express);
                 let datas = res.data;
-                console.log(datas);
                 datas.forEach(data => {
                     this.delivery_info.push({
                         'date':data.time,

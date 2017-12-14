@@ -164,8 +164,8 @@ export const get_glass_data = async orderobj => {
             }
         }
     }
+    
     let paramsuuid = orderobj.params;
-
     if(typeof paramsuuid != 'undefined'){
         let res2 = await loadParamsData(paramsuuid);
         if (JSON.parse(res2) && JSON.parse(res2).result != 'false' && res2 != '') {
@@ -246,3 +246,6 @@ export const get_glass_data = async orderobj => {
 
     return resobj;
 }
+
+
+

@@ -31,7 +31,8 @@
                                 </div>
                                 <label>
                                     <div style='position:relative;overflow: hidden;'>
-                                        <input type="password" :placeholder="passwordPlaceholder" class='login_password form-control' min="8" v-model="password" @click="inputPassword"/>
+                                        <input type="password" :placeholder="passwordPlaceholder" class='login_password form-control' min="8" v-model="password" @click="inputPassword"
+                                        @keyup.enter='login'/>
                                     </div>
                                 </label>
                                 <div class="fsw_juerr">
@@ -86,7 +87,7 @@
                                 </div>
                                 <label>
                                     <div style='position:relative;overflow: hidden;'>
-                                        <input type="password" class='password registration_confirm_password  form-control' placeholder="请确认密码" v-model='confirmPassword' @click="regInputConfirmPassword"/>
+                                        <input type="password" class='password registration_confirm_password  form-control' placeholder="请确认密码" v-model='confirmPassword' @click="regInputConfirmPassword" @keyup.enter="register"/>
                                     </div>
                                 </label>
                                 <div class="fsw_juerr">

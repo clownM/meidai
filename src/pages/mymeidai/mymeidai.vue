@@ -1,6 +1,6 @@
 <template>
     <div class="mymeidai-page">
-        <toptitle title='我的美戴'></toptitle>
+        <!-- <toptitle title='我的美戴'></toptitle> -->
         <div  class="userInfo router-link" id="userinfo" @click="$router.push('/userInfo')">
             <div class="avatar" id="avatar">
                 <img src="../../images/touxiang.png" alt="">
