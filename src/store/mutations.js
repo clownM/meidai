@@ -9,16 +9,26 @@ export const GET_ORDEROBJ = 'GET_ORDEROBJ'
 export const GET_DEALOBJ = 'GET_DEALOBJ'
 export const SAVE_DELIVERY = 'SAVE_DELIVERY'
 export const RESET_USERNAME = 'RESET_USERNAME'
+export const AUTO_LOGIN = 'AUTO_LOGIN'
 
 import {setStore,getStore,setCookie,getCookie,delCookie} from '../config/utils.js'
 
 export default{
 
+	//自动登录
+	[AUTO_LOGIN](state,info){
+		state.autoLogin = info;
+	},
+
     // 记录用户信息
 	[RECORD_USERINFO](state, info) {
 		state.userInfo = info;
 		state.login = true;
-		setCookie('UserUUID', info.uuid ,1);
+		if(state.autoLogin){
+			setCookie('UserUUID', info.uuid ,7)
+		}else{
+			setCookie('UserUUID',info.uuid)
+		}
     },
     //获取用户信息存入vuex
 	[GET_USERINFO](state, info) {

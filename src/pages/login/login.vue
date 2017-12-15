@@ -40,7 +40,7 @@
                                 </div>
                                 <div class='do_login' @click='login'>登录</div>
                                 <div class='remember'>
-                                    <input type="checkbox" name="" id="rememberMe">
+                                    <input type="checkbox" name="" id="rememberMe" v-model='autoLogin' @click="rememberMe">
                                     <label for="rememberMe">记住我</label>
                                     <span>无法登陆？</span>
                                 </div>
@@ -215,7 +215,9 @@
                 reg_password_error:null,
                 reg_confirm_password_error:null,
                 regSuccess:false,
-                regNeterr:false
+                regNeterr:false,
+
+                autoLogin:false,
             }
         },
         created(){
@@ -247,7 +249,7 @@
         },
         methods:{
             ...mapMutations([
-                'RECORD_USERINFO',
+                'RECORD_USERINFO','AUTO_LOGIN'
             ]),
             toLoginForm(){
                 this.loginForm = true;
@@ -375,9 +377,12 @@
                             }
                         }else{
                             //用户登录成功
+                            if(this.autoLogin){
+                                this.AUTO_LOGIN(true);
+                            }else{
+                                this.AUTO_LOGIN(false);
+                            }
                             let useruuid = this.loginInfo.uuid;
-                            // let userInfo = await queryUser(useruuid);
-                            // userInfo.uuid = useruuid;
                             this.RECORD_USERINFO(this.loginInfo);
                             this.$store.dispatch('getUserInfo');
                             this.$router.go(-1);
@@ -407,9 +412,12 @@
                     }
                 }else{
                     //多用户登录成功
+                    if(this.autoLogin){
+                        this.AUTO_LOGIN(true);
+                    }else{
+                        this.AUTO_LOGIN(false);
+                    }
                     let useruuid = this.loginInfo.uuid;
-                    // let userInfo = await queryUser(useruuid);
-                    // userInfo.uuid = useruuid;
                     this.RECORD_USERINFO(this.loginInfo);
                     this.$store.dispatch('getUserInfo')
                     this.$router.go(-1);
@@ -472,6 +480,9 @@
             },
             continueReg(){
                 this.showUserReg = false;
+            },
+            rememberMe(){
+                this.autoLogin = !this.autoLogin
             }
         }
     }

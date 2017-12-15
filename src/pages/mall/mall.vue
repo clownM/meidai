@@ -130,10 +130,8 @@ export default {
     @import '../../style/fswear';
     .mall-page{
         text-align: center;
-        padding-bottom: 70px;
         .curr-position{
             width: 100%;
-            height: 60px;
         }
         .frame-container{
             width: 100%;

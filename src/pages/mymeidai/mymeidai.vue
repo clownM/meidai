@@ -93,7 +93,6 @@ export default{
 @import "../../style/common.scss";
 @import "../../style/fswear";
 .userInfo {
-  margin-top: 50px;
   width: 100%;
   background-color: rgb(11, 227, 253);
   padding: 20px 10px;

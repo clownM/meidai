@@ -8,6 +8,7 @@ Vue.use(Vuex)
 
 const state = {
 	login: false,//是否登录
+	autoLogin:false,//记住密码自动登录
 	userInfo: null, //用户信息
 	orderObj:null,//订单详情页order
 	dealObj:null,//订单详情页deal
