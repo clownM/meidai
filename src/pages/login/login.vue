@@ -217,7 +217,7 @@
                 regSuccess:false,
                 regNeterr:false,
 
-                autoLogin:false,
+                autoLogin:true, //记住密码
             }
         },
         created(){

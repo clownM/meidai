@@ -13,12 +13,13 @@ export const joinzero = (num) => {
 }
 export const formatDate = (date,format) => {
     if(!(date == "")){
-        let _ordertime = date.replace(/-\w*/g, '');
+        // let _ordertime = date.replace(/-\w*/g, '');
+        let _ordertime = new Date(date);
         let _date = new Date(_ordertime);
         let _year = joinzero(_date.getFullYear()) ;
         let _month =joinzero( _date.getMonth() + 1);
         let _day = joinzero(_date.getDate());
-        let _hour =joinzero( _date.getHours() + 8);
+        let _hour =joinzero( _date.getHours());
         let _minute =joinzero(_date.getMinutes());
         let _second = joinzero(_date.getSeconds());
         let date_res;

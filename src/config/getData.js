@@ -71,6 +71,15 @@ export const newUsername = (uuid,username) => ajax({
 		username:username
 	}
 })
+//修改生日
+export const newBirthday = (uuid,birthday) => ajax({
+	url:'/user',
+	data:{
+		action:'update',
+		uuid:uuid,
+		birthday:birthday
+	}
+})
 
 // 查询order
 export const queryOrder = (orderuuid) => ajax({

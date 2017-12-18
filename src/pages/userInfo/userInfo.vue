@@ -25,7 +25,7 @@
             </div>
         </section>
         <section>
-            <router-link to="/" class='router-link'>
+            <div class='router-link' @click='genderVisible = true'>
                 <div class=''aside>
                     <img src="../../images/icons/性别.png" alt="">
                 </div>
@@ -33,18 +33,18 @@
                     <span>{{ gender }}</span>
                     <img src="../../images/icons/向右.png" alt="">
                 </div>
-            </router-link>
+            </div>
         </section>
         <section>
-            <router-link to="/" class='router-link'>
-                <div class='right'>
+            <div class='router-link' @click='datepickerVisible = true'>
+                <div class='aside'>
                     <img src="../../images/icons/生日.png" alt="">
                 </div>
                 <div class='right'>
-                    <span>{{ birthday }}</span>
+                    <span>{{ _birthday }}</span>
                     <img src="../../images/icons/向右.png" alt="">
                 </div>
-            </router-link>
+            </div>
         </section>
         <section>
             <router-link to="/switchUser" class='router-link'>
@@ -71,6 +71,26 @@
         <div class='btn-wrap-app'>
             <button @click="logout">退出登录</button>
         </div>
+        <!-- 生日修改dialog -->
+        <el-dialog title="修改生日" :visible.sync="genderVisible" width='260px'>
+
+            <el-radio v-model="radio" label="1">男</el-radio>
+            <el-radio v-model="radio" label="2">女</el-radio>
+                
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="genderVisible = false">取 消</el-button>
+                <el-button type="primary" @click="genderVisible = false,changeGender()">确 定</el-button>
+            </div>
+        </el-dialog>
+        <!-- 性别修改dialog -->
+        <el-dialog title="修改性别" :visible.sync="datepickerVisible" width='260px'>
+            <el-date-picker v-model='birthday'></el-date-picker>
+                
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="datepickerVisible = false">取 消</el-button>
+                <el-button type="primary" @click="datepickerVisible = false,changeBirthday()">确 定</el-button>
+            </div>
+        </el-dialog>
         <transition name="router-slid" mode="out-in">
             <router-view></router-view>
         </transition>
@@ -80,22 +100,26 @@
 import goback from '@/components/goback';
 import {mapState,mapMutations} from 'vuex';
 import {getCookie,setCookie,delCookie} from '../../config/utils';
+import {newBirthday} from '../../config/getData'
 export default{
     data(){
-      return{
-        username:null,
-        phone:null,
-        gender:null,
-        birthday: null
-      }
+        return{
+            datepickerVisible:false,
+            genderVisible:false,
+            username:null,
+            phone:null,
+            gender:null,
+            birthday: null,
+            _birthday:null,
+            radio:'1',
+        }
     },
     mounted(){
         this.initData();
-        this.$router.go(0);
-
+        // this.$router.go(0);
     },
     components:{
-        goback
+        goback,
     },
     computed:{
       ...mapState([
@@ -104,7 +128,7 @@ export default{
     },
     methods:{
         ...mapMutations([
-            'LOGOUT'
+            'LOGOUT','RESET_BIRTHDAY'
         ]),
         initData(){                             
             if(!this.userInfo){
@@ -113,22 +137,53 @@ export default{
             this.username = this.userInfo.username;
             this.phone = this.userInfo.phone;
             this.gender = this.userInfo.gender || '';
-            this.birthday = this.userInfo.birthday || '';
+            let _birthday = this.userInfo.birthday || '';
+            this.birthday = this._birthday;
+            this._birthday = new Date(_birthday).toLocaleDateString();
         },
         async logout(){
             this.LOGOUT();
             delCookie('UserUUID');
             this.$router.push('/login')
+        },
+        async changeBirthday(){
+            let uuid = getCookie('UserUUID');
+            let birthday = this.birthday.toGMTString().replace('GMT','-0000');
+            this.RESET_BIRTHDAY(birthday);
+            let res = await newBirthday(uuid,birthday);
+            console.log(res);
+        },
+        async changeGender(){
+            let uuid = getCookie('UserUUID');
+            let radio = this.radio;
+            console.log(this.radio);
+            let gender;
+            switch (this.radio) {
+                case '1':
+                    gender = 'male';   
+                    break;
+                case '2':
+                    gender = 'female';
+                    break;
+                default:
+                    gender = 'male';
+                    break;
+            }
+            console.log(gender);
         }
     },
 
     watch: {
         userInfo: function (value){
             if(value){
+                console.log(value);
                 this.username = value.username;
                 this.phone = value.phone;
                 this.gender = value.gender;
                 this.birthday = value.birthday;
+                this._birthday = new Date(value.birthday).toLocaleDateString();
+                // this._birthday = 
+                // this.birthday = this._birthday;
             }
         }
     }

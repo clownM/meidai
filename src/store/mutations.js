@@ -9,6 +9,7 @@ export const GET_ORDEROBJ = 'GET_ORDEROBJ'
 export const GET_DEALOBJ = 'GET_DEALOBJ'
 export const SAVE_DELIVERY = 'SAVE_DELIVERY'
 export const RESET_USERNAME = 'RESET_USERNAME'
+export const RESET_BIRTHDAY = 'RESET_BIRTHDAY'
 export const AUTO_LOGIN = 'AUTO_LOGIN'
 
 import {setStore,getStore,setCookie,getCookie,delCookie} from '../config/utils.js'
@@ -88,4 +89,8 @@ export default{
 	[RESET_USERNAME](state,username) {
 		state.userInfo = Object.assign({}, state.userInfo,{username})
 	},
+	//修改生日
+	[RESET_BIRTHDAY](state,birthday){
+		state.userInfo = Object.assign({}, state.userInfo,{birthday})
+	}
 }
