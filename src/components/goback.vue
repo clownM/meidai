@@ -2,7 +2,7 @@
     <div class="top-fixed">
         <div class="go-back" @click="$router.go(-1)">
             <img src="../images/icons/向左.png" alt="" class='icon-back'>
-            <p>{{ title }}</p>
+            <b>{{ title }}</b>
         </div>
     </div>
 </template>

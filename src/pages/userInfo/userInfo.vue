@@ -19,14 +19,13 @@
                 </div>
                 <div class="right">
                     <span>{{ phone }}</span>
-                    <!-- <img src="../../images/icons/向右.png" alt=""> -->
                     <div></div>
                 </div>
             </div>
         </section>
         <section>
             <div class='router-link' @click='genderVisible = true'>
-                <div class=''aside>
+                <div class='aside'>
                     <img src="../../images/icons/性别.png" alt="">
                 </div>
                 <div class="right">
@@ -71,8 +70,8 @@
         <div class='btn-wrap-app'>
             <button @click="logout">退出登录</button>
         </div>
-        <!-- 生日修改dialog -->
-        <el-dialog title="修改生日" :visible.sync="genderVisible" width='260px'>
+        <!-- 性别修改dialog -->
+        <el-dialog title="修改性别" :visible.sync="genderVisible" width='260px'>
 
             <el-radio v-model="radio" label="1">男</el-radio>
             <el-radio v-model="radio" label="2">女</el-radio>
@@ -82,8 +81,9 @@
                 <el-button type="primary" @click="genderVisible = false,changeGender()">确 定</el-button>
             </div>
         </el-dialog>
-        <!-- 性别修改dialog -->
-        <el-dialog title="修改性别" :visible.sync="datepickerVisible" width='260px'>
+        <!-- 生日修改dialog -->
+        <el-dialog title="修改生日" :visible.sync="datepickerVisible" width='260px'>
+
             <el-date-picker v-model='birthday'></el-date-picker>
                 
             <div slot="footer" class="dialog-footer">
@@ -100,7 +100,7 @@
 import goback from '@/components/goback';
 import {mapState,mapMutations} from 'vuex';
 import {getCookie,setCookie,delCookie} from '../../config/utils';
-import {newBirthday} from '../../config/getData'
+import {newBirthday,newGender} from '../../config/getData'
 export default{
     data(){
         return{
@@ -128,7 +128,7 @@ export default{
     },
     methods:{
         ...mapMutations([
-            'LOGOUT','RESET_BIRTHDAY'
+            'LOGOUT','RESET_BIRTHDAY','RESET_GENDER'
         ]),
         initData(){                             
             if(!this.userInfo){
@@ -136,10 +136,23 @@ export default{
             }
             this.username = this.userInfo.username;
             this.phone = this.userInfo.phone;
-            this.gender = this.userInfo.gender || '';
             let _birthday = this.userInfo.birthday || '';
             this.birthday = this._birthday;
             this._birthday = new Date(_birthday).toLocaleDateString();
+            switch(this.userInfo.gender){
+                case 'male':
+                    this.gender = '男';
+                    this.radio = '1';
+                    break;
+                case 'female':
+                    this.gender = '女'
+                    this.radio = '2';
+                    break;
+                default:
+                    this.gender = '男';
+                    this.radio = '1';
+                    break;
+            }
         },
         async logout(){
             this.LOGOUT();
@@ -155,8 +168,6 @@ export default{
         },
         async changeGender(){
             let uuid = getCookie('UserUUID');
-            let radio = this.radio;
-            console.log(this.radio);
             let gender;
             switch (this.radio) {
                 case '1':
@@ -168,8 +179,12 @@ export default{
                 default:
                     gender = 'male';
                     break;
-            }
+            };
             console.log(gender);
+            this.RESET_GENDER(gender);
+
+            let res = await newGender(uuid,gender);
+            console.log(res);
         }
     },
 
@@ -181,9 +196,22 @@ export default{
                 this.phone = value.phone;
                 this.gender = value.gender;
                 this.birthday = value.birthday;
-                this._birthday = new Date(value.birthday).toLocaleDateString();
-                // this._birthday = 
-                // this.birthday = this._birthday;
+                if(value.birthday != ''){
+                    this._birthday = new Date(value.birthday).toLocaleDateString();
+                }else{
+                    this._birthday = '请选择生日'
+                }
+                switch(value.gender){
+                    case 'male':
+                        this.gender = '男';
+                        break;
+                    case 'female':
+                        this.gender = '女';
+                        break;
+                    default:
+                        this.gender = '男';
+                        break;
+                }
             }
         }
     }

@@ -1,10 +1,15 @@
 <template>
     <div class="mall-page">
         <section class='curr-position' id='container'>
-            <p>当前坐标：{{ location_point }}</p>
-            <p v-if='location_address != ""'>当前位置：{{ location_address }}</p>
+            <div v-if='location_point'>
+                <p>当前坐标：{{ location_point }}</p>
+                <p v-if='location_address != ""'>当前位置：{{ location_address }}</p>
+            </div>
+            <div v-else>
+                <p>正在搜索当前位置……</p>
+            </div>
         </section>
-        <section class="frame-container" ref='frameContainer':style="frameContainerStyle">
+        <section class="frame-container" ref='frameContainer':style="frameContainerStyle" @click="clickIt()">
             <div class="tr" v-for='tr in arr' :style="{height:trHeight + 'px'}">
                 <div class="td" v-for='td in tr' :style="{width:tdWidth + 'px'}">
                     <div class="border">
@@ -13,6 +18,12 @@
                 </div>
             </div>
         </section>
+
+        <el-dialog title="" :visible.sync="dialogVisible" class='dialog' width='300px'>
+            <el-button type='primary' @click="dialogVisible = false,goTryOn()" class='dialog-btn'> 前往试戴 </el-button>
+            <el-button type='primary' @click="dialogVisible = false,addToCart()" class='dialog-btn'> 加入购物车 </el-button>
+        </el-dialog>
+
         <tabs></tabs>
     </div>
 </template>
@@ -31,7 +42,8 @@ export default {
             trHeight:null,
             tdWidth:null,
             frame_container_width:null,
-            arr:[]  
+            arr:[],
+            dialogVisible: false,
         };
     },
     components: {
@@ -121,7 +133,17 @@ export default {
                 console.log('定位失败');
                 console.log(data);
             }
+        },
+        clickIt(){
+            this.dialogVisible = true;
+        },
+        goTryOn(){
+            console.log('试戴');
+        },
+        addToCart(){
+            console.log('加入购物车');
         }
+
     }
 };
 </script>
@@ -129,7 +151,7 @@ export default {
     @import '../../style/common';
     @import '../../style/fswear';
     .mall-page{
-        text-align: center;
+        padding-bottom: 60px;
         .curr-position{
             width: 100%;
         }
@@ -165,6 +187,22 @@ export default {
                 border-bottom: none;
             }
         }
+        .dialog-btn{
+            width:120px;
+            margin:10px auto;
+            color:#fff;
+        }
+        // @media screen and (min-width:768px){
+        //     .dialog{
+        //         width: 50%;
+        //     }
+        // }
+        // @media screen and ( max-width: 767px){
+        //     .dialog{
+        //         width: 260px;
+        //     }
+        // }
     }
+   
 </style>
 
