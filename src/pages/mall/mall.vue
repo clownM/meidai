@@ -9,9 +9,9 @@
                 <p>正在搜索当前位置……</p>
             </div>
         </section>
-        <section class="frame-container" ref='frameContainer':style="frameContainerStyle" @click="clickIt()">
-            <div class="tr" v-for='tr in arr' :style="{height:trHeight + 'px'}">
-                <div class="td" v-for='td in tr' :style="{width:tdWidth + 'px'}">
+        <section class="frame-container" ref='frameContainer':style="frameContainerStyle">
+            <div class="tr" v-for='(tr,index) in arr' :style="{height:trHeight + 'px'}">
+                <div class="td" v-for='(td,index2) in tr' :style="{width:tdWidth + 'px'}" @click="clickIt(index*3 + index2)">
                     <div class="border">
                         <p>{{ td.alias }}</p>
                     </div>
@@ -30,6 +30,7 @@
 <script>
 import tabs from "@/components/tabs";
 import {listFrameProfiles,queryFrameProfiles} from '@/config/getData';
+import { mapState,mapMutations } from 'vuex'
 export default {
     data() {
         return {
@@ -44,13 +45,13 @@ export default {
             frame_container_width:null,
             arr:[],
             dialogVisible: false,
+
+            frameProfiles:null,
+            glass_index:null,
         };
     },
-    components: {
-        tabs
-    },
-    ready:function(){
-        
+    created(){
+
     },
     mounted(){
         this.frame_container_width = this.$refs.frameContainer.offsetWidth;
@@ -58,7 +59,18 @@ export default {
         this.getCurrLocation2();
         this.initData();
     },
+    components: {
+        tabs
+    },
+    computed:{
+        ...mapState([
+            'cartList'
+        ])
+    },
     methods:{
+        ...mapMutations([
+            'ADD_CART'
+        ]),
         async initData(){
             let res = await listFrameProfiles();
             console.log(res);
@@ -66,6 +78,7 @@ export default {
             let res2 = await queryFrameProfiles(uuid);
             console.log(res2);
             let frame_profiles = res2.description.frame_profiles;
+            this.frameProfiles = frame_profiles;
 
             this.frameContainerStyle.height = this.frame_container_width/frame_profiles.size[0]*frame_profiles.size[1];
             this.frameContainerStyle.backgroundImage = "url(/151515.png)";
@@ -134,14 +147,20 @@ export default {
                 console.log(data);
             }
         },
-        clickIt(){
+        clickIt(index){
             this.dialogVisible = true;
+            this.glass_index = index;
         },
         goTryOn(){
             console.log('试戴');
         },
         addToCart(){
             console.log('加入购物车');
+            let index = this.glass_index;
+            let alias = this.frameProfiles.alias[index];
+            let material = this.frameProfiles.material[index];
+            let data = this.frameProfiles.data[index];
+            this.ADD_CART({ index,alias,data,material });
         }
 
     }

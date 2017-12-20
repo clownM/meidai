@@ -6,7 +6,7 @@ import FastClick from 'fastclick'
 import {routerMode} from './config/env'
 import {getCookie} from './config/utils'
 import VueAMap from 'vue-amap'
-import {DatePicker,Dialog,Form,Button,Radio} from 'element-ui'
+import {DatePicker,Dialog,Form,Button,Radio,Icon} from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 
 if ('addEventListener' in document) {
@@ -23,6 +23,7 @@ Vue.use(Dialog);
 Vue.use(Form);
 Vue.use(Button);
 Vue.use(Radio);
+Vue.use(Icon);
 
 const router = new VueRouter({
   routes,

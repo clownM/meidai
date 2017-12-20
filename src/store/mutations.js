@@ -12,6 +12,9 @@ export const RESET_USERNAME = 'RESET_USERNAME'
 export const RESET_BIRTHDAY = 'RESET_BIRTHDAY'
 export const RESET_GENDER = 'RESET_GENDER'
 export const AUTO_LOGIN = 'AUTO_LOGIN'
+export const ADD_CART = 'ADD_CART'
+export const REMOVE_CART = 'REMOVE_CART'
+export const INIT_CART = 'INIT_CART'
 
 import {setStore,getStore,setCookie,getCookie,delCookie} from '../config/utils.js'
 
@@ -97,5 +100,65 @@ export default{
 	//修改性别
 	[RESET_GENDER](state,gender){
 		state.userInfo = Object.assign({}, state.userInfo,{gender})
-	}
+	},
+	// 加入购物车
+	[ADD_CART](state, {
+		index,
+		alias,
+		data,
+		material
+	}) {
+		let useruuid = getCookie('UserUUID') || 'noLogin';
+
+		let cart = state.cartList;
+		let user = cart[useruuid] = (cart[useruuid] || {});
+		user[index] = {
+			'index':index,
+			'alias':alias,
+			'data':data,
+			'material':material
+		}
+		state.cartList = cart;
+		//存入localStorage
+		setStore('shoppingCart', state.cartList);
+	},
+	// 移出购物车
+	[REMOVE_CART](state, {
+		glass_index,
+		alias,
+		data,
+		material
+	}) {
+		let useruuid = getCookie('UserUUID');
+
+		let cart = state.cartList;
+		let user = (cart[useruuid] || {});
+		// let glass = (user[glass_index] || {});
+		user[glass_index] = null;
+	},
+	//网页初始化时从本地缓存获取购物车数据
+	[INIT_CART](state) {
+		console.log('init_cart');
+		let initCart = getStore('shoppingCart');
+		console.log(initCart)
+		let useruuid = getCookie('UserUUID');
+		console.log(useruuid);
+		let _useruuid = Object.keys(JSON.parse(initCart))[0];
+		console.log(_useruuid);
+		if(useruuid){
+			if(useruuid == _useruuid){
+				console.log('登录且已有缓存数据')
+				state.cartList = JSON.parse(initCart);
+			}
+			if(_useruuid == 'noLogin' && Object.keys(state.initCart).length == 0){
+				console.log('登录但无缓存数据，从nologin获取')
+				state.cartList = JSON.parse(initCart);
+			}
+		}else{
+			if(_useruuid == 'noLogin'){
+				console.log('未登录')
+				state.cartList = JSON.parse(initCart);
+			}
+		}
+	},
 }

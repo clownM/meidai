@@ -14,8 +14,9 @@ const state = {
 	dealObj:null,//订单详情页deal
 	delivery_company:null,//物流公司
 	delivery_postid:null,//物流单号
-
 	cartList: {}, // 加入购物车的商品列表
+	thsCartList: {}, //当前用户的购物车
+
 	shopDetail: null, //商家详情信息
 	shopid: null,//商铺id
 	remarkText: null,//可选备注内容
