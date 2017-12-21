@@ -124,17 +124,14 @@ export default{
 	},
 	// 移出购物车
 	[REMOVE_CART](state, {
-		glass_index,
-		alias,
-		data,
-		material
+		itemIndex
 	}) {
-		let useruuid = getCookie('UserUUID');
-
+		let useruuid = getCookie('UserUUID') || 'noLogin';
 		let cart = state.cartList;
 		let user = (cart[useruuid] || {});
-		// let glass = (user[glass_index] || {});
-		user[glass_index] = null;
+		delete user[itemIndex];
+		state.cartList = cart;
+		setStore('shoppingCart', state.cartList);
 	},
 	//网页初始化时从本地缓存获取购物车数据
 	[INIT_CART](state) {
@@ -142,22 +139,35 @@ export default{
 		let initCart = getStore('shoppingCart');
 		console.log(initCart)
 		let useruuid = getCookie('UserUUID');
-		console.log(useruuid);
 		let _useruuid = Object.keys(JSON.parse(initCart))[0];
-		console.log(_useruuid);
 		if(useruuid){
-			if(useruuid == _useruuid){
+			if(_useruuid == useruuid){
 				console.log('登录且已有缓存数据')
 				state.cartList = JSON.parse(initCart);
-			}
-			if(_useruuid == 'noLogin' && Object.keys(state.initCart).length == 0){
-				console.log('登录但无缓存数据，从nologin获取')
-				state.cartList = JSON.parse(initCart);
+			}else if(_useruuid == 'noLogin'){
+				console.log('登录但无缓存数据，从nologin获取');
+				let cart = JSON.parse(initCart);
+				let _cart = {};
+				_cart[useruuid] = {...cart['noLogin']};
+				setStore('shoppingCart',_cart);
+				state.cartList = _cart; 
+			}else{
+				let cart = JSON.parse(initCart);
+				let _cart = {};
+				_cart[useruuid] = null;
+				setStore('shoppingCart',_cart);
+				state.cartList = _cart; 
 			}
 		}else{
 			if(_useruuid == 'noLogin'){
 				console.log('未登录')
 				state.cartList = JSON.parse(initCart);
+			}else{
+				let cart = JSON.parse(initCart);
+				let _cart = {};
+				_cart['noLogin'] = null;
+				setStore('shoppingCart',_cart);
+				state.cartList = _cart; 
 			}
 		}
 	},

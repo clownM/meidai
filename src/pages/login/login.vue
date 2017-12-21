@@ -45,7 +45,7 @@
                                     <span>无法登陆？</span>
                                 </div>
                                 <div class='shejiao' style="text-align:left;">
-                                    <a href="#">社交账户登陆</a>
+                                    <router-link to='/mall'>返回首页</router-link></router-link>
                                 </div>
                                 <div class="fsw_querr" v-if="regNeterr">
                                     <span class="glyphicon glyphicon-remove"></span>
@@ -140,8 +140,8 @@
                         <div class="registration_box1">
                             <div class="registration_qiehua" @click="toPrev2">
                                 <i class="registration_qiehua-left">
-								<img src="../../images/icons/prev.png" />
-							</i>
+                                <img src="../../images/icons/prev.png" />
+                            </i>
                             </div>
                             <div class="registration_userlist">
                                 <div class="fsw_registration_box1">
@@ -163,8 +163,8 @@
                             </div>
                             <div class="registration_qiehua" @click="toNext2">
                                 <i class="registration_qiehua_right ">
-								<img src="../../images/icons/next.png" />
-							</i>
+                                <img src="../../images/icons/next.png" />
+                            </i>
                             </div>
                         </div>
                     </div>
@@ -1027,6 +1027,7 @@ p {
     max-width: 400px;
     display: inline-block;
     text-align: left;
+    position: relative;
 }
 
 #tittle {

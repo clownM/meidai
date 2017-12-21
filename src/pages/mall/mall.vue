@@ -19,6 +19,22 @@
             </div>
         </section>
 
+        <section class='shop-list'>
+            <div class="shop">
+                <div class="pic">
+
+                </div>
+                <div class="info">
+
+                </div>
+                <div class="gotoAppointment">
+                    <button>
+                        预<br>约<br>扫<br>描
+                    </button>
+                </div>
+            </div>
+        </section>
+
         <el-dialog title="" :visible.sync="dialogVisible" class='dialog' width='300px'>
             <el-button type='primary' @click="dialogVisible = false,goTryOn()" class='dialog-btn'> 前往试戴 </el-button>
             <el-button type='primary' @click="dialogVisible = false,addToCart()" class='dialog-btn'> 加入购物车 </el-button>
@@ -210,6 +226,37 @@ export default {
             width:120px;
             margin:10px auto;
             color:#fff;
+        }
+        .shop-list{
+            width: 100%;
+            padding-top: 10px;
+            .shop{
+                width: 100%;
+                height: 120px;
+                display: flex;
+                margin-bottom: 10px;
+                background-color: #fff;
+                .pic{
+                    width: 100px;
+                    height: 100%;
+                }
+                .info{
+                    // width: 100%;
+                    height: 100%;
+                    flex-grow: 1;
+                }
+                .gotoAppointment{
+                    width: 60px;
+                    height: 100%;
+                    button{
+                        width: 100%;
+                        height: 100%;
+                        background-color:rgb(11, 227, 253);
+                        color:#fff;
+                        text-align: center;
+                    }
+                }
+            }
         }
         // @media screen and (min-width:768px){
         //     .dialog{

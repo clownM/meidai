@@ -22,7 +22,7 @@
 <style lang='scss'>
 @import '../style/common';
 .top-fixed {
-  width: 100%;
+  width:100%;
   position: fixed;
   top: 0;
   background-color: #fff;
