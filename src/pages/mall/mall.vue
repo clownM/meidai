@@ -28,7 +28,7 @@
 
                 </div>
                 <div class="gotoAppointment">
-                    <button>
+                    <button @click="gotoAppointment()">
                         预<br>约<br>扫<br>描
                     </button>
                 </div>
@@ -41,12 +41,15 @@
         </el-dialog>
 
         <tabs></tabs>
+
+        <VueCropper ref="cropper" :img='option.img' ></VueCropper>
     </div>
 </template>
 <script>
 import tabs from "@/components/tabs";
 import {listFrameProfiles,queryFrameProfiles} from '@/config/getData';
 import { mapState,mapMutations } from 'vuex'
+import VueCropper from 'vue-cropper'
 export default {
     data() {
         return {
@@ -64,6 +67,16 @@ export default {
 
             frameProfiles:null,
             glass_index:null,
+            option: {
+				img: '',
+				size: 1,
+				full: false,
+				outputType: 'png',
+				canMove: true,
+				fixedBox: false,
+				original: false,
+				canMoveBox: false
+			},
         };
     },
     created(){
@@ -76,7 +89,7 @@ export default {
         this.initData();
     },
     components: {
-        tabs
+        tabs,VueCropper
     },
     computed:{
         ...mapState([
@@ -104,6 +117,7 @@ export default {
             let tr_count = Math.ceil(frame_count / 3);
             this.trHeight = this.frameContainerStyle.height / tr_count;
             let arr = [];
+            
             for(let i = 0;i < tr_count;i++){
                 let tr = [];
                 for(let j = 0;j < 3 ;j++){
@@ -116,6 +130,10 @@ export default {
                 arr.push(tr);
             } 
             this.arr = arr;
+
+            this.$refs.cropper.getCropData((data) => {
+                console.log(data);
+            })
         },
         getCurrLocation(){
             var self = this;
@@ -169,6 +187,15 @@ export default {
         },
         goTryOn(){
             console.log('试戴');
+            let index = this.glass_index;
+            let alias = this.frameProfiles.alias[index];
+            // let material = this.frameProfiles.material[index];
+            // let data = this.frameProfiles.data[index];
+            // this.ADD_CART({ index,alias,data,material });
+            var obj={op:'try_on',glassName:alias};
+            var str = JSON.stringify(obj);
+            console.log(str);
+            window.postMessage(str,'*');
         },
         addToCart(){
             console.log('加入购物车');
@@ -177,8 +204,10 @@ export default {
             let material = this.frameProfiles.material[index];
             let data = this.frameProfiles.data[index];
             this.ADD_CART({ index,alias,data,material });
+        },
+        gotoAppointment(){
+            // window.postMessage('123456','*');
         }
-
     }
 };
 </script>
