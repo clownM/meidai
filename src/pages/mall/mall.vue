@@ -13,7 +13,7 @@
             <div class="tr" v-for='(tr,index) in arr' :style="{height:trHeight + 'px'}">
                 <div class="td" v-for='(td,index2) in tr' :style="{width:tdWidth + 'px'}" @click="clickIt(index*3 + index2)">
                     <div class="border">
-                        <p>{{ td.alias }}</p>
+                        <!-- <p>{{ td.alias }}</p> -->
                     </div>
                 </div>
             </div>
@@ -34,37 +34,26 @@
                 </div>
             </div>
         </section>
-
-        <el-dialog title="" :visible.sync="dialogVisible" class='dialog' width='300px'>
-            <el-button type='primary' @click="dialogVisible = false,goTryOn()" class='dialog-btn'> 前往试戴 </el-button>
-            <el-button type='primary' @click="dialogVisible = false,addToCart()" class='dialog-btn'> 加入购物车 </el-button>
-        </el-dialog>
-
         <tabs></tabs>
-
-        <VueCropper ref="cropper" :img='option.img' ></VueCropper>
     </div>
 </template>
 <script>
 import tabs from "@/components/tabs";
 import {listFrameProfiles,queryFrameProfiles} from '@/config/getData';
 import { mapState,mapMutations } from 'vuex'
-import VueCropper from 'vue-cropper'
 export default {
     data() {
         return {
             location_point:'',
             location_address:'',
             frameContainerStyle:{
-                backgroundImage:null,
                 height:null,
             },
             trHeight:null,
             tdWidth:null,
             frame_container_width:null,
             arr:[],
-            dialogVisible: false,
-
+            
             frameProfiles:null,
             glass_index:null,
             option: {
@@ -89,28 +78,35 @@ export default {
         this.initData();
     },
     components: {
-        tabs,VueCropper
+        tabs
     },
     computed:{
         ...mapState([
             'cartList'
-        ])
+        ]),
+        message:function(){
+            window.document.addEventListener('message', function (e) {
+                //JSON字符串转为对象
+                const message = JSON.parse(e.data);
+                //op=0表示从试戴界面接收到的消息
+                return message;
+            })
+        }
     },
     methods:{
         ...mapMutations([
-            'ADD_CART'
+            'ADD_CART','SAVE_FRAME_PROFILES'
         ]),
         async initData(){
             let res = await listFrameProfiles();
-            console.log(res);
             let uuid = res.list[0];
             let res2 = await queryFrameProfiles(uuid);
             console.log(res2);
             let frame_profiles = res2.description.frame_profiles;
             this.frameProfiles = frame_profiles;
+            this.SAVE_FRAME_PROFILES(frame_profiles);
 
             this.frameContainerStyle.height = this.frame_container_width/frame_profiles.size[0]*frame_profiles.size[1];
-            this.frameContainerStyle.backgroundImage = "url(/151515.png)";
             this.tdWidth = this.frame_container_width/3;
 
             let frame_count = frame_profiles.alias.length;
@@ -130,10 +126,6 @@ export default {
                 arr.push(tr);
             } 
             this.arr = arr;
-
-            this.$refs.cropper.getCropData((data) => {
-                console.log(data);
-            })
         },
         getCurrLocation(){
             var self = this;
@@ -182,31 +174,27 @@ export default {
             }
         },
         clickIt(index){
-            this.dialogVisible = true;
-            this.glass_index = index;
-        },
-        goTryOn(){
-            console.log('试戴');
-            let index = this.glass_index;
             let alias = this.frameProfiles.alias[index];
-            // let material = this.frameProfiles.material[index];
-            // let data = this.frameProfiles.data[index];
-            // this.ADD_CART({ index,alias,data,material });
-            var obj={op:'try_on',glassName:alias};
-            var str = JSON.stringify(obj);
-            console.log(str);
-            window.postMessage(str,'*');
+            this.$router.push({
+                path:'/glassDetails',
+                query:{
+                    alias:alias
+                }
+            });
         },
-        addToCart(){
-            console.log('加入购物车');
-            let index = this.glass_index;
-            let alias = this.frameProfiles.alias[index];
-            let material = this.frameProfiles.material[index];
-            let data = this.frameProfiles.data[index];
-            this.ADD_CART({ index,alias,data,material });
-        },
-        gotoAppointment(){
-            // window.postMessage('123456','*');
+    },
+    watch:{
+        message:function(val){
+            if(val){
+                console.log(val);
+                let alias = val.glassName;
+                this.$router.push({
+                    path:'/glassDetails',
+                    query:{
+                        alias:alias
+                    }
+                })
+            }
         }
     }
 };
@@ -221,6 +209,7 @@ export default {
         }
         .frame-container{
             width: 100%;
+            background-image: url('../../images/product/151515.png');
             background-color: #fff;
             background-size:100% 100%;
             .tr{

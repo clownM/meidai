@@ -20,6 +20,7 @@
         height: 50px;
         position: fixed;
         top: 0;
+        left: 0;
         background-color: #fff;
         border-bottom: 1px solid rgb(240, 240, 240);
         z-index: 9999;

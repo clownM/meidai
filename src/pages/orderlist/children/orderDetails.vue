@@ -1,5 +1,5 @@
 <template>
-  <div class="orderDetails-page">
+  <div class="orderDetails-page" :style="{marginLeft:-marginLeft + 'px'}">
       <goback title='订单详情'></goback>
       <div class="orderdetails">
           <div class="status">
@@ -143,6 +143,7 @@
     export default{
         data(){
             return{
+                marginLeft:0,
                 orderstatus: "", //订单状态
                 station: "", //扫描预约门店
                 right_degrees: "", //右眼度数
@@ -185,6 +186,7 @@
             }
         },
         mounted(){
+            this.getMarginLeft();
             this.initData();
         },
         components:{
@@ -193,7 +195,8 @@
         computed:{
             ...mapState([
                 'orderObj','dealObj'
-            ])
+            ]),
+            
         },
         methods:{
             ...mapMutations([
@@ -267,6 +270,11 @@
                 }else{
                     this.wuliuInfo = false;
                 }
+            },
+            getMarginLeft:function(){
+                let width = document.getElementsByClassName('orderDetails-page')[0].offsetWidth;
+                let marginLeft = width / 2;
+                this.marginLeft = marginLeft; 
             }
         },
         watch: {
@@ -280,10 +288,11 @@
     @import '../../../style/common';
     .orderDetails-page{
         position: fixed;
+        width: 100%;
+        max-width: 768px;
+        height: 100%;
         top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
+        left: 50%;
         background-color: #f5f5f5;
         z-index: 101;
         padding-top: 60px;

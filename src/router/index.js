@@ -3,6 +3,7 @@ import App from '../App'
 const login = r => require.ensure([], () => r(require('@/pages/login/login')), 'login')
 const home = r => require.ensure([], () => r(require('@/pages/home/home')), 'home')
 const mall = r => require.ensure([], () => r(require('@/pages/mall/mall')), 'mall')
+const glassDetails = r => require.ensure([], () => r(require('@/pages/glassDetails/glassDetails')), 'glassDetails')
 const shoppingCart = r => require.ensure([], () => r(require('@/pages/shoppingCart/shoppingCart')), 'shoppingCart')
 const orderlist = r => require.ensure([], () => r(require('@/pages/orderlist/orderlist')), 'orderlist')
 const mymeidai = r => require.ensure([], () => r(require('@/pages/mymeidai/mymeidai')), 'mymeidai       ')
@@ -33,6 +34,11 @@ export default [{
             path: '/mall',
             name:'mall',
             component: mall
+        },
+        {
+            path:'/glassDetails',
+            name:'glassDetails',
+            component: glassDetails
         },
         //购物车
         {

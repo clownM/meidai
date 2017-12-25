@@ -15,8 +15,10 @@ export const AUTO_LOGIN = 'AUTO_LOGIN'
 export const ADD_CART = 'ADD_CART'
 export const REMOVE_CART = 'REMOVE_CART'
 export const INIT_CART = 'INIT_CART'
+export const SAVE_FRAME_PROFILES = 'SAVE_FRAME_PROFILES'
+export const GET_FRAME_PROFILES = 'GET_FRAME_PROFILES'
 
-import {setStore,getStore,setCookie,getCookie,delCookie} from '../config/utils.js'
+import {setStore,getStore,setCookie,getCookie,delCookie, setSessionStore,getSessionStore} from '../config/utils.js'
 
 export default{
 
@@ -171,4 +173,21 @@ export default{
 			}
 		}
 	},
+	//将frameProfiles保存到vuex
+	[SAVE_FRAME_PROFILES](state,val) {
+		state.thisGlassDetails = null;
+		state.frameProfiles = {...val};
+		//存入localStorage
+		setSessionStore('frameProfiles', state.frameProfiles);
+	},
+	//
+	[GET_FRAME_PROFILES](state){
+		if(state.frameProfiles){
+			return
+		}else{
+			let frameProfiles = getSessionStore('frameProfiles');
+			frameProfiles = JSON.parse(frameProfiles);
+			state.frameProfiles = {...frameProfiles};
+		}
+	}
 }

@@ -1,9 +1,9 @@
 <template>
-    <div>
+    <div class='orderlist-page'>
         <goback title='订单列表'></goback>
         <div class="content" id="content">
             <div class="tabs-body" id="tabs-body">
-                <div class="tabs-head">
+                <div class="tabs-head" :style="{marginLeft:marginLeft +'px'}">
                     <ul class="tabs-ul clear">
                         <li>
                             <a href="javascript:0" v-bind:class='{active:(0 == i || isActive == true)}' @click='tabsToggle(0)'>全部</a>
@@ -368,6 +368,7 @@ import {getCookie,setSessionStore} from '../../config/utils'
 export default {
   data() {
     return {
+      marginLeft:0,
       ordersArray: [],
       toscan_array: [],
       topay_array: [],
@@ -380,6 +381,7 @@ export default {
     };
   },
   mounted() {
+      this.getMarginLeft();
     this.initData();
   },
   components: {
@@ -388,7 +390,7 @@ export default {
   computed: {
       ...mapState([
           'userInfo'
-      ])
+      ]),
   },
   methods: {
     ...mapMutations([
@@ -534,6 +536,11 @@ export default {
         setSessionStore('delivery_company',company);
         setSessionStore('delivery_postid',postid)
         this.$router.push('/delivery')
+    },
+    getMarginLeft(){
+        let width = document.getElementsByClassName('tabs-head')[0].offsetWidth;
+        let marginLeft = -width/2;
+        this.marginLeft = marginLeft;
     }
   },
   watch: {
@@ -547,12 +554,18 @@ export default {
 <style lang='scss'>
 @import "../../style/common";
 @import '../../style/fswear';
+.orderlist-page{
+    width:100%;
+    position: relative;
+}
 .tabs-head {
   width: 100%;
+  max-width: 768px;
   height: 50px;
   background-color: #fff;
   border-top: 1px solid rgb(240, 240, 240);
   position: fixed;
+  left: 50%;
   top: 50px;
   z-index: 100;
 }

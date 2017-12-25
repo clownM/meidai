@@ -41,9 +41,6 @@
         	gotoAddress(path){
         		this.$router.push(path)
             },
-            // gotoMeidai(){
-            //     window.location.href = 'https://www.meidaitech.com';
-            // }
         },
     }
 </script>
@@ -54,6 +51,7 @@
 .user_tabs {
   position: fixed;
   bottom: 0;
+  left: 0;
   width: 100%;
   height: 60px;
   border-top: 1px solid #ccc;
