@@ -223,6 +223,8 @@ export default{
     .userInfo-page{
         width:100%;
         padding-top: 60px;
+        padding-bottom: 50px;
+        position: relative;
         section{
             width: 100%;
             height: 50px;

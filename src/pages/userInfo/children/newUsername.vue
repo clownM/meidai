@@ -58,7 +58,7 @@ import {getCookie} from '../../../config/utils'
 @import '../../../style/common';
 @import '../../../style/fswear';
 .newUsername-page{
-    position: fixed;
+    position: absolute;
     top: 0;
     left: 0;
     right: 0;

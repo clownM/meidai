@@ -36,12 +36,16 @@ export default{
             alias:null,
             data:null,
             material:null,
-            picHeight:null,
+            picHeight:0,
         }
     },
     mounted(){
         this.initData();
         this.setImgHeight();
+        window.addEventListener('resize',this.setImgHeight);
+    },
+    beforeDestroy(){
+        window.removeEventListener('resize',this.setImgHeight)
     },
     computed:{
         ...mapState([
@@ -101,6 +105,7 @@ export default{
     .glassDetails-page{
         position: relative;
         background-color: #fff;
+        margin-bottom: 60px;
         .glass-pic{
             width: 100%;
             background-image: url('../../images/product/nunki-01.png');

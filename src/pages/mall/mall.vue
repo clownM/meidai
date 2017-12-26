@@ -9,7 +9,7 @@
                 <p>正在搜索当前位置……</p>
             </div>
         </section>
-        <section class="frame-container" ref='frameContainer':style="frameContainerStyle">
+        <section class="frame-container" ref='frameContainer':style="{height:frameContainerHeight+'px'}">
             <div class="tr" v-for='(tr,index) in arr' :style="{height:trHeight + 'px'}">
                 <div class="td" v-for='(td,index2) in tr' :style="{width:tdWidth + 'px'}" @click="clickIt(index*3 + index2)">
                     <div class="border">
@@ -46,44 +46,33 @@ export default {
         return {
             location_point:'',
             location_address:'',
-            frameContainerStyle:{
-                height:null,
-            },
-            trHeight:null,
-            tdWidth:null,
-            frame_container_width:null,
+            frameContainerWidth:null,
+            frameContainerHeight:null,
+            frameWidth:null,
+            frameHeight:null,
+
             arr:[],
             
-            frameProfiles:null,
+            frame_profiles:null,
             glass_index:null,
-            option: {
-				img: '',
-				size: 1,
-				full: false,
-				outputType: 'png',
-				canMove: true,
-				fixedBox: false,
-				original: false,
-				canMoveBox: false
-			},
         };
     },
     created(){
 
     },
     mounted(){
-        this.frame_container_width = this.$refs.frameContainer.offsetWidth;
-        // this.getCurrLocation();
-        this.getCurrLocation2();
+        this.getCurrLocation();
         this.initData();
+        this.setDomSize();
+        window.addEventListener('resize',this.setDomSize)
+    },
+    beforeDestroy(){
+        window.removeEventListener('resize',this.setDomSize)
     },
     components: {
         tabs
     },
     computed:{
-        ...mapState([
-            'cartList'
-        ]),
         message:function(){
             window.document.addEventListener('message', function (e) {
                 //JSON字符串转为对象
@@ -98,20 +87,23 @@ export default {
             'ADD_CART','SAVE_FRAME_PROFILES'
         ]),
         async initData(){
+            this.frameContainerWidth = this.$refs.frameContainer.offsetWidth;
             let res = await listFrameProfiles();
             let uuid = res.list[0];
             let res2 = await queryFrameProfiles(uuid);
             console.log(res2);
             let frame_profiles = res2.description.frame_profiles;
-            this.frameProfiles = frame_profiles;
-            this.SAVE_FRAME_PROFILES(frame_profiles);
+            this.frame_profiles = frame_profiles;
 
-            this.frameContainerStyle.height = this.frame_container_width/frame_profiles.size[0]*frame_profiles.size[1];
-            this.tdWidth = this.frame_container_width/3;
+            this.SAVE_FRAME_PROFILES(frame_profiles);
 
             let frame_count = frame_profiles.alias.length;
             let tr_count = Math.ceil(frame_count / 3);
-            this.trHeight = this.frameContainerStyle.height / tr_count;
+            
+            this.frameContainerHeight = this.frameContainerWidth/this.frame_profiles.size[0]*this.frame_profiles.size[1];
+            this.trHeight = this.frameContainerHeight / tr_count;
+            this.tdWidth = this.frameContainerWidth/3;
+
             let arr = [];
             
             for(let i = 0;i < tr_count;i++){
@@ -127,25 +119,16 @@ export default {
             } 
             this.arr = arr;
         },
-        getCurrLocation(){
-            var self = this;
-            let geolocation = new BMap.Geolocation();
-            geolocation.enableSDKLocation();
-            let geoc = new BMap.Geocoder();
-            geolocation.getCurrentPosition(function(r){
-                if(this.getStatus() == BMAP_STATUS_SUCCESS){
-                    self.location_point = r.point.lng+','+r.point.lat;
-                    geoc.getLocation(new BMap.Point(r.point.lng, r.point.lat),function(res){
-                        console.log(res);
-                        self.location_address = res.address;
-                    });
-                }
-                else {
-                    self.location_point = 'failed'+this.getStatus();
-                }        
-            });
+        setDomSize(){
+            let width = this.$refs.frameContainer.offsetWidth;
+            console.log(this.frameProfiles);
+            // console.log(this.frameContainerWidth)
+            this.frameContainerHeight =  width / this.frameProfiles.size[0] * this.frameProfiles.size[1];
+            let tr_count = Math.ceil(this.this.frameProfiles.alias.length / 3);
+            this.trHeight = this.frameContainerHeight / tr_count;
+            this.tdWidth = this.frameContainerWidth / 3;            
         },
-        getCurrLocation2(){
+        getCurrLocation(){
             var self = this;
             let map, geolocation;
             //加载地图，调用浏览器定位服务
@@ -168,13 +151,13 @@ export default {
             }
             //解析定位错误信息
             function onError(data) {
-                self.location_point = '定位失败';
+                self.location_point = '定位失败' + {...data};
                 console.log('定位失败');
                 console.log(data);
             }
         },
         clickIt(index){
-            let alias = this.frameProfiles.alias[index];
+            let alias = this.frame_profiles.alias[index];
             this.$router.push({
                 path:'/glassDetails',
                 query:{

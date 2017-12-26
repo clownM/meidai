@@ -15,7 +15,7 @@ const state = {
 	delivery_company:null,//物流公司
 	delivery_postid:null,//物流单号
 	cartList: {}, // 加入购物车的商品列表
-	frameProfiles:null,//当前眼镜的信息
+	frameProfiles:null,//镜框信息
 
 	shopDetail: null, //商家详情信息
 	shopid: null,//商铺id
