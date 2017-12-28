@@ -10,12 +10,14 @@ import VueAMap from 'vue-amap'
 import Element from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 
-if ('addEventListener' in document) {
-    document.addEventListener('DOMContentLoaded', function() {
-        FastClick.attach(document.body);
-    }, false);
-}
+import Vant from 'vant'
+import 'vant/lib/vant-css/index.css'
 
+// if ('addEventListener' in document) {
+//     document.addEventListener('DOMContentLoaded', function() {
+//         FastClick.attach(document.body);
+//     }, false);
+// }
 
 Vue.use(VueRouter);
 Vue.use(VueAMap);
@@ -26,8 +28,8 @@ Vue.use(VueAMap);
 // Vue.use(Button);
 // Vue.use(Radio);
 // Vue.use(Icon);
-Vue.use(Element, { size: 'small' })
-
+Vue.use(Element, { size: 'small' });
+Vue.use(Vant);
 
 const router = new VueRouter({
   routes,
@@ -43,21 +45,21 @@ VueAMap.initAMapApiLoader({
 });  
 
 // 导航守卫
-// router.beforeEach((to,from,next) => {
-//   const nextRoute = ['/userInfo','/newPwd','/switchUser','/orderlist'];
-//   let UserUUID = getCookie('UserUUID');
-//   if(nextRoute.indexOf(to.path) >= 0){
-//     if(!UserUUID){
-//       router.push({path:'/login'});
-//     }
-//   }
-//   if(to.name === 'login'){
-//     if(UserUUID){
-//       router.push({path:'/mymeidai'});
-//     }
-//   }
-//   next();
-// });
+router.beforeEach((to,from,next) => {
+  const nextRoute = ['/userInfo','/newPwd','/switchUser','/orderlist'];
+  let UserUUID = getCookie('UserUUID');
+  if(nextRoute.indexOf(to.path) >= 0){
+    if(!UserUUID){
+      router.push({path:'/login'});
+    }
+  }
+  if(to.name === 'login'){
+    if(UserUUID){
+      router.push({path:'/mymeidai'});
+    }
+  }
+  next();
+});
 
 
 new Vue({

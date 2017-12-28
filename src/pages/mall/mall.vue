@@ -63,7 +63,6 @@ export default {
     mounted(){
         this.getCurrLocation();
         this.initData();
-        this.setDomSize();
         window.addEventListener('resize',this.setDomSize)
     },
     beforeDestroy(){
@@ -73,6 +72,9 @@ export default {
         tabs
     },
     computed:{
+        ...mapState([
+            'frameProfiles'
+        ]),
         message:function(){
             window.document.addEventListener('message', function (e) {
                 //JSON字符串转为对象
@@ -98,11 +100,13 @@ export default {
             this.SAVE_FRAME_PROFILES(frame_profiles);
 
             let frame_count = frame_profiles.alias.length;
-            let tr_count = Math.ceil(frame_count / 3);
+
+            let td_count = frame_profiles.dimensions[0];
+            let tr_count = frame_profiles.dimensions[1];
             
             this.frameContainerHeight = this.frameContainerWidth/this.frame_profiles.size[0]*this.frame_profiles.size[1];
             this.trHeight = this.frameContainerHeight / tr_count;
-            this.tdWidth = this.frameContainerWidth/3;
+            this.tdWidth = this.frameContainerWidth/td_count;
 
             let arr = [];
             
@@ -121,12 +125,13 @@ export default {
         },
         setDomSize(){
             let width = this.$refs.frameContainer.offsetWidth;
-            console.log(this.frameProfiles);
-            // console.log(this.frameContainerWidth)
-            this.frameContainerHeight =  width / this.frameProfiles.size[0] * this.frameProfiles.size[1];
-            let tr_count = Math.ceil(this.this.frameProfiles.alias.length / 3);
+            let frameProfiles = this.frameProfiles;
+            this.frameContainerHeight =  width / frameProfiles.size[0] * frameProfiles.size[1];
+
+            let td_count = frameProfiles.dimensions[0];
+            let tr_count = frameProfiles.dimensions[1];
             this.trHeight = this.frameContainerHeight / tr_count;
-            this.tdWidth = this.frameContainerWidth / 3;            
+            this.tdWidth = width / td_count;            
         },
         getCurrLocation(){
             var self = this;
@@ -151,9 +156,8 @@ export default {
             }
             //解析定位错误信息
             function onError(data) {
-                self.location_point = '定位失败' + {...data};
-                console.log('定位失败');
-                console.log(data);
+                self.location_point = '定位失败  '+data.message;
+                console.log('定位失败:',data);
             }
         },
         clickIt(index){

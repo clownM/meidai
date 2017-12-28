@@ -67,11 +67,26 @@
                 </div>
             </router-link>
         </section>
+        <div class='datepicker'>
+            <van-popup v-model="datepickerVisible" position='bottom'>
+                <van-datetime-picker 
+                    v-model='birthday' 
+                    :min-date='minDate'
+                    :max-date='maxDate'
+                    type='date'
+                    @confirm='datePickerConfirm' 
+                    @cancel='datepickerVisible = false'>
+                </van-datetime-picker>
+            </van-popup>
+        </div>
+        <div class="genderPicker">
+            <van-actionsheet v-model='genderVisible' :actions='actions'></van-actionsheet>
+        </div>
         <div class='btn-wrap-app'>
             <button @click="logout">退出登录</button>
         </div>
         <!-- 性别修改dialog -->
-        <el-dialog title="修改性别" :visible.sync="genderVisible" width='260px'>
+        <!-- <el-dialog title="修改性别" :visible.sync="genderVisible" width='260px'>
 
             <el-radio v-model="radio" label="1">男</el-radio>
             <el-radio v-model="radio" label="2">女</el-radio>
@@ -80,17 +95,7 @@
                 <el-button @click="genderVisible = false">取 消</el-button>
                 <el-button type="primary" @click="genderVisible = false,changeGender()">确 定</el-button>
             </div>
-        </el-dialog>
-        <!-- 生日修改dialog -->
-        <el-dialog title="修改生日" :visible.sync="datepickerVisible" width='260px'>
-
-            <el-date-picker v-model='birthday'></el-date-picker>
-                
-            <div slot="footer" class="dialog-footer">
-                <el-button @click="datepickerVisible = false">取 消</el-button>
-                <el-button type="primary" @click="datepickerVisible = false,changeBirthday()">确 定</el-button>
-            </div>
-        </el-dialog>
+        </el-dialog> -->
         <transition name="router-slid" mode="out-in">
             <router-view></router-view>
         </transition>
@@ -101,9 +106,11 @@ import goback from '@/components/goback';
 import {mapState,mapMutations} from 'vuex';
 import {getCookie,setCookie,delCookie} from '../../config/utils';
 import {newBirthday,newGender} from '../../config/getData'
+
 export default{
     data(){
         return{
+            show:true,
             datepickerVisible:false,
             genderVisible:false,
             username:null,
@@ -111,12 +118,24 @@ export default{
             gender:null,
             birthday: null,
             _birthday:null,
-            radio:'1',
+
+            minDate:new Date(1970,0,2),
+            maxDate:new Date(),
+
+            actions: [
+                {
+                    name:'男',
+                    callback:this.genderMale
+                },
+                {
+                    name:'女',
+                    callback:this.genderFemale
+                }
+            ]
         }
     },
     mounted(){
         this.initData();
-        // this.$router.go(0);
     },
     components:{
         goback,
@@ -137,20 +156,17 @@ export default{
             this.username = this.userInfo.username;
             this.phone = this.userInfo.phone;
             let _birthday = this.userInfo.birthday || '';
-            this.birthday = this._birthday;
+            this.birthday = new Date(this._birthday);
             this._birthday = new Date(_birthday).toLocaleDateString();
             switch(this.userInfo.gender){
                 case 'male':
                     this.gender = '男';
-                    this.radio = '1';
                     break;
                 case 'female':
                     this.gender = '女'
-                    this.radio = '2';
                     break;
                 default:
                     this.gender = '男';
-                    this.radio = '1';
                     break;
             }
         },
@@ -159,33 +175,31 @@ export default{
             delCookie('UserUUID');
             this.$router.push('/login')
         },
-        async changeBirthday(){
+
+        async changeGender(gender){
             let uuid = getCookie('UserUUID');
-            let birthday = this.birthday.toGMTString().replace('GMT','-0000');
+            this.RESET_GENDER(gender);
+            let res = await newGender(uuid,gender);
+        },
+        genderMale(){
+            this.genderVisible = false;
+            let gender = 'male';
+            this.changeGender(gender);
+        },
+        genderFemale(){
+            this.genderVisible = false;
+            let gender = 'female';
+            this.changeGender(gender);
+        },
+
+        async datePickerConfirm(value){
+            let uuid = getCookie('UserUUID');
+            let birthday = value.toGMTString().replace('GMT','-0000');
             this.RESET_BIRTHDAY(birthday);
             let res = await newBirthday(uuid,birthday);
             console.log(res);
+            this.datepickerVisible = false;
         },
-        async changeGender(){
-            let uuid = getCookie('UserUUID');
-            let gender;
-            switch (this.radio) {
-                case '1':
-                    gender = 'male';   
-                    break;
-                case '2':
-                    gender = 'female';
-                    break;
-                default:
-                    gender = 'male';
-                    break;
-            };
-            console.log(gender);
-            this.RESET_GENDER(gender);
-
-            let res = await newGender(uuid,gender);
-            console.log(res);
-        }
     },
 
     watch: {
@@ -195,7 +209,7 @@ export default{
                 this.username = value.username;
                 this.phone = value.phone;
                 this.gender = value.gender;
-                this.birthday = value.birthday;
+                this.birthday = new Date(value.birthday);
                 if(value.birthday != ''){
                     this._birthday = new Date(value.birthday).toLocaleDateString();
                 }else{
@@ -254,5 +268,12 @@ export default{
                 }
             }
         }
+        // .datepicker,.genderPicker{
+        //     position: fixed;
+        //     left: 0;
+        //     bottom: 0;
+        //     right: 0;
+        //     z-index: 103;
+        // }
     }
 </style>

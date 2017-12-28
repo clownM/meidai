@@ -6,13 +6,15 @@ const mall = r => require.ensure([], () => r(require('@/pages/mall/mall')), 'mal
 const glassDetails = r => require.ensure([], () => r(require('@/pages/glassDetails/glassDetails')), 'glassDetails')
 const shoppingCart = r => require.ensure([], () => r(require('@/pages/shoppingCart/shoppingCart')), 'shoppingCart')
 const orderlist = r => require.ensure([], () => r(require('@/pages/orderlist/orderlist')), 'orderlist')
-const mymeidai = r => require.ensure([], () => r(require('@/pages/mymeidai/mymeidai')), 'mymeidai       ')
+const mymeidai = r => require.ensure([], () => r(require('@/pages/mymeidai/mymeidai')), 'mymeidai')
 const userInfo = r => require.ensure([], () => r(require('@/pages/userInfo/userInfo')), 'userInfo')
 const newPwd = r => require.ensure([], () => r(require('@/pages/userInfo/children/newPwd')), 'newPwd')
 const switchUser = r => require.ensure([], () => r(require('@/pages/switchUser/switchUser')), 'switchUser')
 const delivery = r => require.ensure([], () => r(require('@/pages/delivery/delivery')), 'delivery')
 const orderDetails = r => require.ensure([], () => r(require('@/pages/orderlist/children/orderDetails')), 'orderDetails')
 const newUsername = r => require.ensure([], () => r(require('@/pages/userInfo/children/newUsername')), 'newUsername')
+
+const test = r => require.ensure([], () => r(require('@/pages/test')), 'test')
 
 export default [{
     path:'/',
@@ -96,6 +98,11 @@ export default [{
             path: '/login',
             name:'login',
             component: login
+        },
+
+        {
+            path:'/test',
+            component:test
         }
     ]
 }];
