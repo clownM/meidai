@@ -66,3 +66,16 @@ new Vue({
   router,
   store,
 }).$mount('#app');
+
+window.document.addEventListener('message', function (e) {
+    //JSON字符串转为对象
+    const message = JSON.parse(e.data);
+    //op=0表示从试戴界面接收到的消息
+    let alias = message.glassName;
+    this.$router.push({
+        path:'/glassDetails',
+        query:{
+            alias:alias
+        }
+    })
+})

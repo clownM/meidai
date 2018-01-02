@@ -39,6 +39,7 @@
 </template>
 <script>
 import tabs from "@/components/tabs";
+import navbar from '@/components/navbar';
 import {listFrameProfiles,queryFrameProfiles} from '@/config/getData';
 import { mapState,mapMutations } from 'vuex'
 export default {
@@ -75,14 +76,6 @@ export default {
         ...mapState([
             'frameProfiles'
         ]),
-        message:function(){
-            window.document.addEventListener('message', function (e) {
-                //JSON字符串转为对象
-                const message = JSON.parse(e.data);
-                //op=0表示从试戴界面接收到的消息
-                return message;
-            })
-        }
     },
     methods:{
         ...mapMutations([
@@ -171,18 +164,7 @@ export default {
         },
     },
     watch:{
-        message:function(val){
-            if(val){
-                console.log(val);
-                let alias = val.glassName;
-                this.$router.push({
-                    path:'/glassDetails',
-                    query:{
-                        alias:alias
-                    }
-                })
-            }
-        }
+        
     }
 };
 </script>

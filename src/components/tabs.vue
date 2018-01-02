@@ -1,23 +1,23 @@
 <template>
-    <div class="user_tabs">
-        <div class="user_tabs_wrap">
-            <div class="user_tabs_tab" id="meidaitech" @click="gotoAddress('/home')">
-                <img src="../images/icons/首页.png" alt="" class="tab_icon">
+    <div class="user-tabs">
+        <div class="user-tabs-wrap">
+            <div class="user-tabs-tab" id="meidaitech" @click="gotoAddress('/home')">
+                <img src="../images/icons/首页.png" alt="" class="tab-icon">
                 <!-- <div class="icon"></div> -->
                 <div>主页</div>
             </div>
-            <div class="user_tabs_tab" id="index" @click="gotoAddress('/mall')">
-                <img src="../images/icons/购物袋.png" alt="" class="tab_icon">
+            <div class="user-tabs-tab" id="index" @click="gotoAddress('/mall')">
+                <img src="../images/icons/购物袋.png" alt="" class="tab-icon">
                 <!-- <div class="icon"></div> -->
                 <div>商城</div>
             </div>
-            <div class="user_tabs_tab" id="cart" @click="gotoAddress('/shoppingCart')">
-                <img src="../images/icons/购物车.png" alt="" class="tab_icon">
+            <div class="user-tabs-tab" id="cart" @click="gotoAddress('/shoppingCart')">
+                <img src="../images/icons/购物车.png" alt="" class="tab-icon">
                 <!-- <div class="icon"></div> -->
                 <div>购物车</div>
             </div>
-            <div class="user_tabs_tab" id="mymeidai" @click="gotoAddress('/mymeidai')">
-                <img src="../images/icons/我的.png" alt="" class="tab_icon">
+            <div class="user-tabs-tab" id="mymeidai" @click="gotoAddress('/mymeidai')">
+                <img src="../images/icons/我的.png" alt="" class="tab-icon">
                 <div>我的美戴</div>
             </div>
         </div>
@@ -48,7 +48,7 @@
 <style lang='scss'>
 /* 移动端底部tabs */
 @import '../style/common.scss';
-.user_tabs {
+.user-tabs {
   position: fixed;
   bottom: 0;
   left: 0;
@@ -58,20 +58,25 @@
   background-color: #fff;
 }
 
-.user_tabs_wrap {
+.user-tabs-wrap {
   width: 100%;
   height: 60px;
   display: flex;
   justify-content: space-around;
 }
 
-.user_tabs_tab {
+.user-tabs-tab {
   text-align: center;
 }
 
-.tab_icon {
+.tab-icon {
   width: 20px;
   height: 20px;
   margin-top: 10px;
+}
+@media screen and (min-width:1025px) {
+    .user-tabs{
+        display:none;
+    }
 }
 </style>

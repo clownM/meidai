@@ -1,6 +1,5 @@
 <template>
     <div class="mymeidai-page">
-        <!-- <toptitle title='我的美戴'></toptitle> -->
         <div  class="userInfo router-link" id="userinfo" @click="$router.push('/userInfo')">
             <div class="avatar" id="avatar">
                 <img src="../../images/touxiang.png" alt="">
@@ -47,7 +46,6 @@
     </div>
 </template>
 <script>
-import toptitle from '@/components/toptitle';
 import tabs from '@/components/tabs';
 import {mapState,mapMutations} from 'vuex';
 import {getCookie,setCookie} from '../../config/utils';
@@ -63,7 +61,7 @@ export default{
       this.initData();
     },
     components:{
-        toptitle,tabs
+        tabs
     },
     computed:{
       ...mapState([
