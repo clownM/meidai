@@ -8,12 +8,13 @@ const shoppingCart = r => require.ensure([], () => r(require('@/pages/shoppingCa
 const orderlist = r => require.ensure([], () => r(require('@/pages/orderlist/orderlist')), 'orderlist')
 const mymeidai = r => require.ensure([], () => r(require('@/pages/mymeidai/mymeidai')), 'mymeidai')
 const userInfo = r => require.ensure([], () => r(require('@/pages/userInfo/userInfo')), 'userInfo')
-const newPwd = r => require.ensure([], () => r(require('@/pages/userInfo/children/newPwd')), 'newPwd')
+const newPwd = r => require.ensure([], () => r(require('@/pages/newPwd/newPwd')), 'newPwd')
 const switchUser = r => require.ensure([], () => r(require('@/pages/switchUser/switchUser')), 'switchUser')
 const delivery = r => require.ensure([], () => r(require('@/pages/delivery/delivery')), 'delivery')
 const orderDetails = r => require.ensure([], () => r(require('@/pages/orderlist/children/orderDetails')), 'orderDetails')
 const newUsername = r => require.ensure([], () => r(require('@/pages/userInfo/children/newUsername')), 'newUsername')
 
+const _userinfo = r => require.ensure([], () => r(require('@/pages/pc/userinfo')), '_userinfo')
 const test = r => require.ensure([], () => r(require('@/pages/test')), 'test')
 
 export default [{
@@ -63,12 +64,13 @@ export default [{
                 path:'newUsername',
                 name:'newUsername',
                 component:newUsername
-            },{    
-                // 修改密码
-                path:'newPwd',
-                name:'newPwd',
-                component:newPwd
             }]
+        },
+        {    
+            // 修改密码
+            path:'/newPwd',
+            name:'newPwd',
+            component:newPwd
         },
         {
           // 切换关联用户
@@ -103,6 +105,11 @@ export default [{
         {
             path:'/test',
             component:test
+        },
+        //PC端页面
+        {
+            path:'/_userinfo',
+            component: _userinfo
         }
     ]
 }];

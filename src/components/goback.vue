@@ -1,18 +1,28 @@
 <template>
-    <div class="top-fixed">
+    <section class="top-fixed" v-if='!isPC'>
         <div class="go-back" @click="$router.go(-1)">
             <img src="../images/icons/向左.png" alt="" class='icon-back'>
             <b>{{ title }}</b>
         </div>
-    </div>
+    </section>
 </template>
 
 <script>
+import {isPC} from '../config/utils'
     export default{
         data(){
-           return{}
+           return{
+               isPC:null
+           }
         },
         props:['title'],
+        mounted(){
+            if(isPC()){
+                this.isPC = true;
+            }else{
+                this.isPC = false;
+            }
+        },
         methods:{
 
         }

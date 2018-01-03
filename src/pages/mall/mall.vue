@@ -1,40 +1,43 @@
 <template>
-    <div class="mall-page">
-        <section class='curr-position' id='container'>
-            <div v-if='location_point'>
-                <p>当前坐标：{{ location_point }}</p>
-                <p v-if='location_address != ""'>当前位置：{{ location_address }}</p>
-            </div>
-            <div v-else>
-                <p>正在搜索当前位置……</p>
-            </div>
-        </section>
-        <section class="frame-container" ref='frameContainer':style="{height:frameContainerHeight+'px'}">
-            <div class="tr" v-for='(tr,index) in arr' :style="{height:trHeight + 'px'}">
-                <div class="td" v-for='(td,index2) in tr' :style="{width:tdWidth + 'px'}" @click="clickIt(index*3 + index2)">
-                    <div class="border">
-                        <!-- <p>{{ td.alias }}</p> -->
+    <div>
+        <navbar></navbar>
+        <div class="mall-page">
+            <section class='curr-position' id='container'>
+                <div v-if='location_point'>
+                    <p>当前坐标：{{ location_point }}</p>
+                    <p v-if='location_address != ""'>当前位置：{{ location_address }}</p>
+                </div>
+                <div v-else>
+                    <p>正在搜索当前位置……</p>
+                </div>
+            </section>
+            <section class="frame-container" ref='frameContainer':style="{height:frameContainerHeight+'px'}">
+                <div class="tr" v-for='(tr,index) in arr' :style="{height:trHeight + 'px'}">
+                    <div class="td" v-for='(td,index2) in tr' :style="{width:tdWidth + 'px'}" @click="clickIt(index*3 + index2)">
+                        <div class="border">
+                            <!-- <p>{{ td.alias }}</p> -->
+                        </div>
                     </div>
                 </div>
-            </div>
-        </section>
+            </section>
 
-        <section class='shop-list'>
-            <div class="shop">
-                <div class="pic">
+            <section class='shop-list'>
+                <div class="shop">
+                    <div class="pic">
 
-                </div>
-                <div class="info">
+                    </div>
+                    <div class="info">
 
+                    </div>
+                    <div class="gotoAppointment">
+                        <button @click="gotoAppointment()">
+                            预<br>约<br>扫<br>描
+                        </button>
+                    </div>
                 </div>
-                <div class="gotoAppointment">
-                    <button @click="gotoAppointment()">
-                        预<br>约<br>扫<br>描
-                    </button>
-                </div>
-            </div>
-        </section>
-        <tabs></tabs>
+            </section>
+            <tabs></tabs>
+        </div>
     </div>
 </template>
 <script>
@@ -70,7 +73,7 @@ export default {
         window.removeEventListener('resize',this.setDomSize)
     },
     components: {
-        tabs
+        tabs,navbar
     },
     computed:{
         ...mapState([

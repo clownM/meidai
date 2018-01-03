@@ -361,6 +361,7 @@
 </template>
 <script>
 import goback from "@/components/goback";
+import navbar from "@/components/navbar";
 import {mapState,mapMutations} from 'vuex';
 import { queryOrder,cancelOrder,queryDeal } from "@/config/getData"
 import {formatDate,getStatus} from '../../config/fswear'
@@ -560,7 +561,7 @@ export default {
 }
 .tabs-head {
   width: 100%;
-  max-width: 768px;
+  max-width: 1024px;
   height: 50px;
   background-color: #fff;
   border-top: 1px solid rgb(240, 240, 240);

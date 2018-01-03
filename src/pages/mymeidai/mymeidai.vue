@@ -1,4 +1,6 @@
 <template>
+  <div>
+    <navbar></navbar>
     <div class="mymeidai-page">
         <div  class="userInfo router-link" id="userinfo" @click="$router.push('/userInfo')">
             <div class="avatar" id="avatar">
@@ -44,9 +46,11 @@
             <router-view></router-view>
         </transition> -->
     </div>
+  </div>
 </template>
 <script>
 import tabs from '@/components/tabs';
+import navbar from '@/components/navbar';
 import {mapState,mapMutations} from 'vuex';
 import {getCookie,setCookie} from '../../config/utils';
 export default{
@@ -61,7 +65,7 @@ export default{
       this.initData();
     },
     components:{
-        tabs
+        tabs,navbar
     },
     computed:{
       ...mapState([

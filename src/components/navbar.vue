@@ -1,20 +1,20 @@
 <template>
-    <nav class="topbar">
+    <nav class="topbar" v-if='isPC'>
         <div class="nav-container">
             <div class="nav-left" @click='toMeidai()'>
                 <div class="logo">
                     <img src="../images/logo/LOGOxiao.png" alt="">
                 </div>
-                    <span>美戴科技</span>
+                <span>美戴科技</span>
             </div>
             <div class="nav-right">
-                <div class="userinfo" @click='toLogin()'>
+                <div class="isLogin">
                     <el-dropdown>
                         <span class="el-dropdown-link">
                             {{ username }}<i class="el-icon-arrow-down el-icon--right"></i>
                         </span>
                         <el-dropdown-menu slot="dropdown" class='dropdown-items' >
-                            <table class='table-userinfo' :style='{display:dropdownVisible}'>
+                            <table class='table-islogin'>
                                 <tr>
                                     <td class='avatar'>
                                         <img src="../images/touxiang.png" alt="" >
@@ -25,20 +25,24 @@
                                 </tr>
                                 <tr>
                                     <td colspan="2">
-                                        <button>账户管理</button>
+                                        <button @click="toMeidaiUser('/_userinfo')">账户管理</button>
                                     </td>
                                 </tr>
                             </table>
                         </el-dropdown-menu>
                     </el-dropdown>
                 </div>
+                <!-- <div class="noLogin" @click="toMeidaiUser('/login')" v-else>
+                    登录&nbsp;/&nbsp;注册
+                </div> -->
+                
                 <span>丨</span>
                 <div class="order" @click='toMeidaiUser("/orderlist")'>
                     <span>我的订单</span>
                 </div>
                 <span>丨</span>
-                <div class="cart" :style='{paddingRight:"0"}'>
-                    <span>购物车</span>
+                <div class="cart" :style='{paddingRight:"0"}' @click='toMeidaiUser("/shoppingCart")'>
+                    <span class='icon-cart'></span> <span>购物车</span> <span v-show="cartItemNums > 0"> ({{ cartItemNums }}) </span>
                 </div>
             </div>
         </div>
@@ -46,13 +50,14 @@
 </template>
 <script>
 import {mapState,mapMutations} from 'vuex';
-import {getCookie} from '../config/utils'
+import {getCookie,delCookie,isPC} from '../config/utils'
     export default{
         data(){
             return{
-                username: '登录 / 注册',
-                dropdownVisible:'',
-                login:false
+                username: null,
+                isLogin:true,
+                cartItemNums:0,
+                isPC:null
             }
         },
         mounted(){
@@ -64,17 +69,23 @@ import {getCookie} from '../config/utils'
             ])
         },
         methods:{
+            ...mapMutations([
+                'LOGOUT'
+            ]),
             initLogin(){
-                if(getCookie('userUUID')){
+                if(getCookie('UserUUID')){
                     if(!this.userInfo){
                         this.$store.dispatch('getUserInfo')
                     }
-                    this.login = true;
-                    this.dropdownVisible = '';
-                    this.username = this.userInfo.username;
+                    this.isLogin = true;
+                    this.username = this.userInfo.username || '暂无用户名';
                 } else{
-                    this.login = false;
-                    this.dropdownVisible = 'none';
+                    this.isLogin = false;
+                }
+                if(isPC()){
+                    this.isPC = true;
+                }else{
+                    this.isPC = false;
                 }
             },
             toMeidai(){
@@ -84,36 +95,48 @@ import {getCookie} from '../config/utils'
                 this.$router.push(path);
             },
             toLogin(){
-                // if(this.login){
-                //     return
-                // }else{
+                if(this.isLogin){
+                    return
+                }else{
                     this.$router.push('/login');
-                // }
+                }
+            },
+            async logout(){
+                this.LOGOUT();
+                delCookie('UserUUID');
+                this.$router.push('/login')
             }
         },
         watch:{
-
+            userInfo:function(val){
+                if(val){
+                    this.username = val.username || '暂无用户名';
+                }       
+            }
         }
     }
 </script>   
 <style lang='scss'>
     @import '../style/common';
+    .el-popper[x-placement^=bottom]{
+        margin-top:5px;
+    }
     .topbar{
+        font-size:14px;
         width: 100%;
-        margin: 0;
-        min-width:996px;
+        min-width:1226px;
         margin-bottom:10px;
         height:50px;
         line-height: 50px;
         background-color: #fff;
         .nav-container{
-            width: 1024px;
+            width: 1226px;
             margin: 0 auto;
             .nav-left{
                 float:left;  
                 display:flex;
                 .logo{
-                    height: 60px;
+                    height: 50px;
                     padding-right: 10px;
                     img{
                         height: 40px;
@@ -127,10 +150,19 @@ import {getCookie} from '../config/utils'
                 div{
                     padding:0 10px;
                 }
+                .cart{
+                    .icon-cart{
+                        display: inline-block;
+                        width: 15px;
+                        height: 15px;
+                        background-image: url('../images/icons/购物车.png');
+                        background-size: 100%;
+                    }
+                }
             }
         }
     }
-    .table-userinfo{
+    .table-islogin{
         tr{
             td{
                 width: 80px;
@@ -154,10 +186,5 @@ import {getCookie} from '../config/utils'
     .nav-left:hover,
     .nav-right>div:hover{
         cursor: pointer;
-    }
-    @media screen and (max-width:1024px){
-        .topbar{
-            display:none;
-        }
     }
 </style>

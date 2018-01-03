@@ -1,5 +1,5 @@
 <template>
-    <div class="user-tabs">
+    <div class="user-tabs" v-if='!isPC'>
         <div class="user-tabs-wrap">
             <div class="user-tabs-tab" id="meidaitech" @click="gotoAddress('/home')">
                 <img src="../images/icons/首页.png" alt="" class="tab-icon">
@@ -25,19 +25,27 @@
 </template>
 
 <script>
+import {isPC} from '../config/utils'
     export default{
         data(){
             return{
-                
+                isPC:null
             }
         },
         created(){
            
         },
         mounted(){
-            
+            if(isPC()){
+                this.isPC = true;
+            }else{
+                this.isPC = false;
+            }
         },
         methods: {
+            init(){
+
+            },
         	gotoAddress(path){
         		this.$router.push(path)
             },
@@ -73,10 +81,5 @@
   width: 20px;
   height: 20px;
   margin-top: 10px;
-}
-@media screen and (min-width:1025px) {
-    .user-tabs{
-        display:none;
-    }
 }
 </style>

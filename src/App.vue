@@ -1,19 +1,13 @@
 <template>
-    <div>
-        <navbar></navbar>
-        <transition name="router-fade" mode="out-in">
-            <router-view></router-view>
-        </transition>
-    </div>
+    <transition name="router-fade" mode="out-in">
+        <router-view></router-view>
+    </transition>
 </template>
 
 <script>
-import navbar from '@/components/navbar';
-export default {
-    components:{
-        navbar
-    }
-};
+export default{
+    
+}
 </script>
 
 <style lang='scss'>
