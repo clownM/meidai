@@ -5,19 +5,21 @@
             <navLeft class='nav-left' thisPage='newPwd'></navLeft>
             <div class='content'>
                 <goback title='修改密码'></goback>
-                <div class="mt50px">
-                    <div class='section'>
-                        <input type="password" placeholder="请输入旧密码" v-model="oldpwd" class='inputarea'>
+                <div class="pagewrap">
+                    <div class="inputwrap">
+                        <div class='section'>
+                            <input type="password" placeholder="请输入旧密码" v-model="oldpwd" class='inputarea'>
+                        </div>
+                        <div class='section'>
+                            <input type="password" placeholder="请输入新密码（密码长度最少为8位）" v-model="newpwd1" class='inputarea'>
+                        </div>
+                        <div class='section'>
+                            <input type="password" placeholder="请确认新密码" v-model="newpwd2" class='inputarea'>
+                        </div>
                     </div>
-                    <div class='section'>
-                        <input type="password" placeholder="请输入新密码（密码长度最少为8位）" v-model="newpwd1" class='inputarea'>
+                    <div class="btn-wrap-app">
+                        <button @click="submit" class='btn-red-large'>确认提交</button>
                     </div>
-                    <div class='section'>
-                        <input type="password" placeholder="请确认新密码" v-model="newpwd2" class='inputarea'>
-                    </div>
-                </div>
-                <div class="btn-wrap-app">
-                    <button @click="submit" class='btn-red-large'>确认提交</button>
                 </div>
             </div>
         </div>
@@ -92,16 +94,15 @@
             }
             .content{
                 flex:4;
-                margin-left: 10px;
                 height: 100%;
-                
             }
         }
-        .mt50px{
+        .pagewrap{
             width: 100%;
-            padding: 5px 10px;
-            background-color: #fff;
+            margin-top: 60px;
             .section{
+                padding: 5px 10px;
+                background-color: #fff;
                 width: 100%;
                 height: 40px;
                 padding-top: 3px;
@@ -120,6 +121,19 @@
             }
             .section:first-child{
                 border-top: none;
+            }
+        }
+        @media screen and (min-width:1025px) {
+            .pagewrap{
+                width:400px;
+                margin: 100px auto;
+                .inputwrap{
+                    .section{
+                        margin-top: 10px;
+                        border: 1px solid #ccc;
+                        border-radius: 5px;
+                    }
+                }
             }
         }
     }

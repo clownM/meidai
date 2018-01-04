@@ -4,8 +4,8 @@
             <li class='title'>
                 <strong>订单中心</strong>
             </li>
-            <li>
-                <router-link to="">我的订单</router-link>
+            <li :class='{active:thisPage == "orderlist"}'>
+                <router-link to="/orderlist">我的订单</router-link>
             </li>
             <li class='title'>
                 <strong>账户管理</strong>
@@ -46,11 +46,13 @@ import {isPC} from '../config/utils'
 <style lang='scss'>
     @import '../style/common';
     .nav-wrap{
-        padding-top: 50px;
-        padding-bottom: 150px;
-        background-color: #fff;
+        margin-right: 10px;
         ul{
-            margin-left: 40px;
+            width: 100%;
+            padding-left: 40px;
+            padding-top: 50px;
+            padding-bottom: 50px;
+            background-color: #fff;
             li{
                 height: 30px;
                 line-height: 30px;

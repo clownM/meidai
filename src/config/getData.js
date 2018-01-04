@@ -89,7 +89,16 @@ export const newGender = (uuid,gender) => ajax({
 		gender:gender
 	}
 })
-
+export const updateUser = (username,gender,birthday) => ajax({
+	url: '/user',
+	data:{
+		action:'update',
+		uuid:uuid,
+		username:username,
+		gender:gender,
+		birthday:birthday
+	}
+})
 // 查询order
 export const queryOrder = (orderuuid) => ajax({
 	url:'/order',

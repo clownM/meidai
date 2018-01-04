@@ -85,17 +85,6 @@
         <div class='btn-wrap-app'>
             <button @click="logout">退出登录</button>
         </div>
-        <!-- 性别修改dialog -->
-        <!-- <el-dialog title="修改性别" :visible.sync="genderVisible" width='260px'>
-
-            <el-radio v-model="radio" label="1">男</el-radio>
-            <el-radio v-model="radio" label="2">女</el-radio>
-                
-            <div slot="footer" class="dialog-footer">
-                <el-button @click="genderVisible = false">取 消</el-button>
-                <el-button type="primary" @click="genderVisible = false,changeGender()">确 定</el-button>
-            </div>
-        </el-dialog> -->
         <transition name="router-slid" mode="out-in">
             <router-view></router-view>
         </transition>
@@ -268,12 +257,5 @@ export default{
                 }
             }
         }
-        // .datepicker,.genderPicker{
-        //     position: fixed;
-        //     left: 0;
-        //     bottom: 0;
-        //     right: 0;
-        //     z-index: 103;
-        // }
     }
 </style>

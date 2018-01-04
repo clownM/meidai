@@ -1,367 +1,374 @@
 <template>
     <div class='orderlist-page'>
-        <goback title='订单列表'></goback>
-        <div class="content" id="content">
-            <div class="tabs-body" id="tabs-body">
-                <div class="tabs-head" :style="{marginLeft:marginLeft +'px'}">
-                    <ul class="tabs-ul clear">
-                        <li>
-                            <a href="javascript:0" v-bind:class='{active:(0 == i || isActive == true)}' @click='tabsToggle(0)'>全部</a>
-                        </li>
-                        <li>
-                            <a href="javascript:0" v-bind:class='{active:1 == i}' @click='tabsToggle(1)'>待扫描</a>
-                        </li>
-                        <li>
-                            <a href="javascript:0" v-bind:class='{active:2 == i}' @click='tabsToggle(2)'>待支付</a>
-                        </li>
-                        <li>
-                            <a href="javascript:0" v-bind:class='{active:3 == i}' @click='tabsToggle(3)'>生产中</a>
-                        </li>
-                        <li>
-                            <a href="javascript:0" v-bind:class='{active:4 == i}' @click='tabsToggle(4)'>待收货</a>
-                        </li>
-                    </ul>
+        <navbar></navbar>
+        <div class="container">
+            <navLeft thisPage='orderlist'></navLeft>
+            <div class='_content'>
+                <goback title='订单列表'></goback>
+                <div class="content" id="content">
+                    <div class="tabs-body" id="tabs-body">
+                        <div class="tabs-head">
+                            <ul class="tabs-ul clear">
+                                <li>
+                                    <a href="javascript:0" v-bind:class='{active:(0 == i || isActive == true)}' @click='tabsToggle(0)'>全部</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:0" v-bind:class='{active:1 == i}' @click='tabsToggle(1)'>待扫描</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:0" v-bind:class='{active:2 == i}' @click='tabsToggle(2)'>待支付</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:0" v-bind:class='{active:3 == i}' @click='tabsToggle(3)'>生产中</a>
+                                </li>
+                                <li>
+                                    <a href="javascript:0" v-bind:class='{active:4 == i}' @click='tabsToggle(4)'>待收货</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- 全部订单 -->
+                        <div class="tabs-contents" v-bind:class='{active:(i == 0 || isActive == true)}'>
+                            <div class="failorder" v-if="isEmpty(toscan_array) && isEmpty(topay_array) && isEmpty(printing_array) && isEmpty(delivering_array) && isEmpty(done_array)">
+                                1没有相关订单
+                            </div>
+                            <div v-else>
+                                <!-- 全部/待扫描 -->
+                                <div class="order" v-for="(order,index) in toscan_array">
+                                    <div class="order-header">
+                                        <div></div>
+                                        <div class="status" v-text="order.status"></div>
+                                    </div>
+                                    <div class="order-body">
+                                        <div class="orderno">订单编号：
+                                            <span v-text="order.orderuuid"></span>
+                                        </div>
+                                        <div class="createdate">订单创建时间:
+                                            <span v-text="order.createdate"></span>
+                                        </div>
+                                        <div class="station">预约扫描地址：
+                                            <span v-text="order.station"></span>
+                                        </div>
+                                        <div class="appointmentdate">预约扫描时间：
+                                            <span v-text="order.appointmentdate"></span>
+                                        </div>
+                                    </div>
+                                    <div class="order-footer">
+                                        <button class="cancelOrder" @click='cancel(order.orderuuid)'>取消预约</button>
+                                    </div>
+                                </div>
+                                <!--  全部/待支付-->
+                                <div class="order" v-for="(deal,index) in topay_array">
+                                    <div class="order-header">
+                                        <div></div>
+                                        <div class="status" v-text="deal.status"></div>
+                                    </div>
+                                    <div class="order-body">
+                                        <div class="orderuuid">orderuuid
+                                            <span v-text="deal.orderuuid"></span>
+                                        </div>
+                                        <div class="dealuuid">dealuuid:
+                                            <span v-text="deal.dealuuid"></span>
+                                        </div>
+                                        <div class="createdate">order创建时间:
+                                            <span v-text="deal.orderCreatedate"></span>
+                                        </div>
+                                        <div class="station">预约扫描地址：
+                                            <span v-text="deal.station"></span>
+                                        </div>
+                                        <div class="appointmentdate">预约扫描时间：
+                                            <span v-text="deal.appointmentdate"></span>
+                                        </div>
+                                        <div class="scandate">实际扫描时间：
+                                            <span v-text="deal.scandate"></span>
+                                        </div>
+                                        <div class="dealCreatedate">deal创建时间：
+                                            <span v-text="deal.dealCreatedate"></span>
+                                        </div>
+                                        <div class="price" v-text="'合计： ￥ '+deal.price"></div>
+                                    </div>
+                                    <div class="order-footer">
+                                        <button class="">付款</button>
+                                        <button class="to_order_details" @click="toOrderDetails(deal.orderuuid,deal.dealuuid)">订单详情</button>
+                                    </div>
+                                </div>
+                                <!-- 全部/生产中 -->
+                                <div class="order" v-for="(deal,index) in printing_array">
+                                    <div class="order-header">
+                                        <div></div>
+                                        <div class="status" v-text="deal.status"></div>
+                                    </div>
+                                    <div class="order-body">
+                                        <div class="orderuuid">orderuuid
+                                            <span v-text="deal.orderuuid"></span>
+                                        </div>
+                                        <div class="dealuuid">dealuuid:
+                                            <span v-text="deal.dealuuid"></span>
+                                        </div>
+                                        <div class="createdate">order创建时间:
+                                            <span v-text="deal.orderCreatedate"></span>
+                                        </div>
+                                        <div class="station">预约扫描地址：
+                                            <span v-text="deal.station"></span>
+                                        </div>
+                                        <div class="appointmentdate">预约扫描时间：
+                                            <span v-text="deal.appointmentdate"></span>
+                                        </div>
+                                        <div class="scandate">实际扫描时间：
+                                            <span v-text="deal.scandate"></span>
+                                        </div>
+                                        <div class="dealCreatedate">deal创建时间：
+                                            <span v-text="deal.dealCreatedate"></span>
+                                        </div>
+                                        <div class="price" v-text="'合计： ￥ '+deal.price"></div>
+                                    </div>
+                                    <div class="order-footer">
+                                        <button class="">催单</button>
+                                        <button class="to_order_details" @click="toOrderDetails(deal.orderuuid,deal.dealuuid)">订单详情</button>
+                                    </div>
+                                </div>
+                                <!-- 全部/待收货 -->
+                                <div class="order" v-for="(deal,index) in delivering_array">
+                                    <div class="order-header">
+                                        <div></div>
+                                        <div class="status" v-text="deal.status"></div>
+                                    </div>
+                                    <div class="order-body">
+                                        <div class="orderuuid">orderuuid
+                                            <span v-text="deal.orderuuid"></span>
+                                        </div>
+                                        <div class="dealuuid">dealuuid:
+                                            <span v-text="deal.dealuuid"></span>
+                                        </div>
+                                        <div class="createdate">order创建时间:
+                                            <span v-text="deal.orderCreatedate"></span>
+                                        </div>
+                                        <div class="station">预约扫描地址：
+                                            <span v-text="deal.station"></span>
+                                        </div>
+                                        <div class="appointmentdate">预约扫描时间：
+                                            <span v-text="deal.appointmentdate"></span>
+                                        </div>
+                                        <div class="scandate">实际扫描时间：
+                                            <span v-text="deal.scandate"></span>
+                                        </div>
+                                        <div class="dealCreatedate">deal创建时间：
+                                            <span v-text="deal.dealCreatedate"></span>
+                                        </div>
+                                        <div class="price" v-text="'合计： ￥ '+deal.price"></div>
+                                    </div>
+                                    <div class="order-footer">
+                                        <button class="to_delivery" @click='toDelivery(deal.delivery_company,deal.delivery_postid)'>查看物流</button>
+                                        <button class="">确认收货</button>
+                                        <button class="to_order_details" @click="toOrderDetails(deal.orderuuid,deal.dealuuid)">订单详情</button>
+                                    </div>
+                                </div>
+                                <!-- 全部/已收货 -->
+                                <div class="order" v-for="(deal,index) in done_array">
+                                    <div class="order-header">
+                                        <div></div>
+                                        <div class="status" v-text="deal.status"></div>
+                                    </div>
+                                    <div class="order-body">
+                                        <div class="orderuuid">orderuuid
+                                            <span v-text="deal.orderuuid"></span>
+                                        </div>
+                                        <div class="dealuuid">dealuuid:
+                                            <span v-text="deal.dealuuid"></span>
+                                        </div>
+                                        <div class="createdate">order创建时间:
+                                            <span v-text="deal.orderCreatedate"></span>
+                                        </div>
+                                        <div class="station">预约扫描地址：
+                                            <span v-text="deal.station"></span>
+                                        </div>
+                                        <div class="appointmentdate">预约扫描时间：
+                                            <span v-text="deal.appointmentdate"></span>
+                                        </div>
+                                        <div class="scandate">实际扫描时间：
+                                            <span v-text="deal.scandate"></span>
+                                        </div>
+                                        <div class="dealCreatedate">deal创建时间：
+                                            <span v-text="deal.dealCreatedate"></span>
+                                        </div>
+                                        <div class="price" v-text="'合计： ￥ '+deal.price"></div>
+                                    </div>
+                                    <div class="order-footer">
+                                        <button class="to_order_details" @click="toOrderDetails(deal.orderuuid,deal.dealuuid)">订单详情</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 待扫描 -->
+                        <div class="tabs-contents div-toscan" v-bind:class='{active:i == 1}'>
+                            <div class="failorder" v-if="isEmpty(topay_array)">
+                                2没有相关订单
+                            </div>
+                            <div v-else>
+                                <div class="order" v-for="(order,index) in toscan_array">
+                                    <div class="order-header">
+                                        <div></div>
+                                        <div class="status" v-text="order.status"></div>
+                                    </div>
+                                    <div class="order-body">
+                                        <div class="orderuuid">orderuuid：
+                                            <span v-text="order.orderuuid"></span>
+                                        </div>
+                                        <div class="createdate">订单创建时间:
+                                            <span v-text="order.createdate"></span>
+                                        </div>
+                                        <div class="station">预约扫描地址：
+                                            <span v-text="order.station"></span>
+                                        </div>
+                                        <div class="appointmentdate">预约扫描时间：
+                                            <span v-text="order.appointmentdate"></span>
+                                        </div>
+                                    </div>
+                                    <div class="order-footer">
+                                        <button class="cancelOrder" @click='cancel(order.orderuuid)'>取消预约</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 待支付 -->
+                        <div class="tabs-contents div-topay" v-bind:class='{active:i == 2}'>
+                            <div class="failorder" v-if="isEmpty(topay_array)">
+                                3没有相关订单
+                            </div>
+                            <div v-else>
+                                <div class="order" v-for="(deal,index) in topay_array">
+                                    <div class="order-header">
+                                        <div></div>
+                                        <div class="status" v-text="deal.status"></div>
+                                    </div>
+                                    <div class="order-body">
+                                        <div class="orderuuid">
+                                            orderuuid: <span>{{deal.orderuuid}}</span>
+                                        </div>
+                                        <div class="dealuuid">dealuuid:
+                                            <span v-text="deal.dealuuid"></span>
+                                        </div>
+                                        <div class="createdate">order创建时间:
+                                            <span v-text="deal.orderCreatedate"></span>
+                                        </div>
+                                        <div class="station">预约扫描地址：
+                                            <span v-text="deal.station"></span>
+                                        </div>
+                                        <div class="appointmentdate">预约扫描时间：
+                                            <span v-text="deal.appointmentdate"></span>
+                                        </div>
+                                        <div class="scandate">实际扫描时间：
+                                            <span v-text="deal.scandate"></span>
+                                        </div>
+                                        <div class="dealCreatedate">deal创建时间：
+                                            <span v-text="deal.dealCreatedate"></span>
+                                        </div>
+                                        <div class="price" v-text="'合计： ￥ '+deal.price"></div>
+                                    </div>
+                                    <div class="order-footer">
+                                        <button class="">付款</button>
+                                        <button class="to_order_details" @click="toOrderDetails(deal.orderuuid,deal.dealuuid)">订单详情</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 生产中 -->
+                        <div class="tabs-contents div-printing" v-bind:class='{active:i == 3}'>
+                            <div class="failorder" v-if="isEmpty(printing_array)">
+                                4没有相关订单
+                            </div>
+                            <div v-else>
+                                <div class="order" v-for="(deal,index) in printing_array">
+                                    <div class="order-header">
+                                        <div></div>
+                                        <div class="status" v-text="deal.status"></div>
+                                    </div>
+                                    <div class="order-body">
+                                        <div class="orderuuid">orderuuid
+                                            <span v-text="deal.orderuuid"></span>
+                                        </div>
+                                        <div class="dealuuid">dealuuid:
+                                            <span v-text="deal.dealuuid"></span>
+                                        </div>
+                                        <div class="createdate">order创建时间:
+                                            <span v-text="deal.orderCreatedate"></span>
+                                        </div>
+                                        <div class="station">预约扫描地址：
+                                            <span v-text="deal.station"></span>
+                                        </div>
+                                        <div class="appointmentdate">预约扫描时间：
+                                            <span v-text="deal.appointmentdate"></span>
+                                        </div>
+                                        <div class="scandate">实际扫描时间：
+                                            <span v-text="deal.scandate"></span>
+                                        </div>
+                                        <div class="dealCreatedate">deal创建时间：
+                                            <span v-text="deal.dealCreatedate"></span>
+                                        </div>
+                                        <div class="price" v-text="'合计： ￥ '+deal.price"></div>
+                                    </div>
+                                    <div class="order-footer">
+                                        <button class="">催单</button>
+                                        <button class="to_order_details" @click="toOrderDetails(deal.orderuuid,deal.dealuuid)">订单详情</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 待收货 -->
+                        <div class="tabs-contents div-delivering" v-bind:class='{active:i == 4}'>
+                            <div class="failorder" v-if="isEmpty(delivering_array)">
+                                5没有相关订单
+                            </div>
+                            <div v-else>
+                                <div class="order" v-for="(deal,index) in delivering_array">
+                                    <div class="order-header">
+                                        <div></div>
+                                        <div class="status" v-text="deal.status"></div>
+                                    </div>
+                                    <div class="order-body">
+                                        <div class="orderuuid">orderuuid
+                                            <span v-text="deal.orderuuid"></span>
+                                        </div>
+                                        <div class="dealuuid">dealuuid:
+                                            <span v-text="deal.dealuuid"></span>
+                                        </div>
+                                        <div class="createdate">order创建时间:
+                                            <span v-text="deal.orderCreatedate"></span>
+                                        </div>
+                                        <div class="station">预约扫描地址：
+                                            <span v-text="deal.station"></span>
+                                        </div>
+                                        <div class="appointmentdate">预约扫描时间：
+                                            <span v-text="deal.appointmentdate"></span>
+                                        </div>
+                                        <div class="scandate">实际扫描时间：
+                                            <span v-text="deal.scandate"></span>
+                                        </div>
+                                        <div class="dealCreatedate">deal创建时间：
+                                            <span v-text="deal.dealCreatedate"></span>
+                                        </div>
+                                        <div class="price" v-text="'合计： ￥ '+deal.price"></div>
+                                    </div>
+                                    <div class="order-footer">
+                                        <button class="to_delivery" @click='toDelivery(deal.delivery_company,deal.delivery_postid)'>查看物流</button>
+                                        <button class="">确认收货</button>
+                                        <button class="to_order_details" @click="toOrderDetails(deal.orderuuid,deal.dealuuid)">订单详情</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <!-- 全部订单 -->
-                <div class="tabs-contents" v-bind:class='{active:(i == 0 || isActive == true)}'>
-                    <div class="failorder" v-if="isEmpty(toscan_array) && isEmpty(topay_array) && isEmpty(printing_array) && isEmpty(delivering_array) && isEmpty(done_array)">
-                        1没有相关订单
-                    </div>
-                    <div v-else>
-                        <!-- 全部/待扫描 -->
-                        <div class="order" v-for="(order,index) in toscan_array">
-                            <div class="order-header">
-                                <div></div>
-                                <div class="status" v-text="order.status"></div>
-                            </div>
-                            <div class="order-body">
-                                <div class="orderno">订单编号：
-                                    <span v-text="order.orderuuid"></span>
-                                </div>
-                                <div class="createdate">订单创建时间:
-                                    <span v-text="order.createdate"></span>
-                                </div>
-                                <div class="station">预约扫描地址：
-                                    <span v-text="order.station"></span>
-                                </div>
-                                <div class="appointmentdate">预约扫描时间：
-                                    <span v-text="order.appointmentdate"></span>
-                                </div>
-                            </div>
-                            <div class="order-footer">
-                                <button class="cancelOrder" @click='cancel(order.orderuuid)'>取消预约</button>
-                            </div>
-                        </div>
-                        <!--  全部/待支付-->
-                        <div class="order" v-for="(deal,index) in topay_array">
-                            <div class="order-header">
-                                <div></div>
-                                <div class="status" v-text="deal.status"></div>
-                            </div>
-                            <div class="order-body">
-                                <div class="orderuuid">orderuuid
-                                    <span v-text="deal.orderuuid"></span>
-                                </div>
-                                <div class="dealuuid">dealuuid:
-                                    <span v-text="deal.dealuuid"></span>
-                                </div>
-                                <div class="createdate">order创建时间:
-                                    <span v-text="deal.orderCreatedate"></span>
-                                </div>
-                                <div class="station">预约扫描地址：
-                                    <span v-text="deal.station"></span>
-                                </div>
-                                <div class="appointmentdate">预约扫描时间：
-                                    <span v-text="deal.appointmentdate"></span>
-                                </div>
-                                <div class="scandate">实际扫描时间：
-                                    <span v-text="deal.scandate"></span>
-                                </div>
-                                <div class="dealCreatedate">deal创建时间：
-                                    <span v-text="deal.dealCreatedate"></span>
-                                </div>
-                                <div class="price" v-text="'合计： ￥ '+deal.price"></div>
-                            </div>
-                            <div class="order-footer">
-                                <button class="">付款</button>
-                                <button class="to_order_details" @click="toOrderDetails(deal.orderuuid,deal.dealuuid)">订单详情</button>
-                            </div>
-                        </div>
-                        <!-- 全部/生产中 -->
-                        <div class="order" v-for="(deal,index) in printing_array">
-                            <div class="order-header">
-                                <div></div>
-                                <div class="status" v-text="deal.status"></div>
-                            </div>
-                            <div class="order-body">
-                                <div class="orderuuid">orderuuid
-                                    <span v-text="deal.orderuuid"></span>
-                                </div>
-                                <div class="dealuuid">dealuuid:
-                                    <span v-text="deal.dealuuid"></span>
-                                </div>
-                                <div class="createdate">order创建时间:
-                                    <span v-text="deal.orderCreatedate"></span>
-                                </div>
-                                <div class="station">预约扫描地址：
-                                    <span v-text="deal.station"></span>
-                                </div>
-                                <div class="appointmentdate">预约扫描时间：
-                                    <span v-text="deal.appointmentdate"></span>
-                                </div>
-                                <div class="scandate">实际扫描时间：
-                                    <span v-text="deal.scandate"></span>
-                                </div>
-                                <div class="dealCreatedate">deal创建时间：
-                                    <span v-text="deal.dealCreatedate"></span>
-                                </div>
-                                <div class="price" v-text="'合计： ￥ '+deal.price"></div>
-                            </div>
-                            <div class="order-footer">
-                                <button class="">催单</button>
-                                <button class="to_order_details" @click="toOrderDetails(deal.orderuuid,deal.dealuuid)">订单详情</button>
-                            </div>
-                        </div>
-                        <!-- 全部/待收货 -->
-                        <div class="order" v-for="(deal,index) in delivering_array">
-                            <div class="order-header">
-                                <div></div>
-                                <div class="status" v-text="deal.status"></div>
-                            </div>
-                            <div class="order-body">
-                                <div class="orderuuid">orderuuid
-                                    <span v-text="deal.orderuuid"></span>
-                                </div>
-                                <div class="dealuuid">dealuuid:
-                                    <span v-text="deal.dealuuid"></span>
-                                </div>
-                                <div class="createdate">order创建时间:
-                                    <span v-text="deal.orderCreatedate"></span>
-                                </div>
-                                <div class="station">预约扫描地址：
-                                    <span v-text="deal.station"></span>
-                                </div>
-                                <div class="appointmentdate">预约扫描时间：
-                                    <span v-text="deal.appointmentdate"></span>
-                                </div>
-                                <div class="scandate">实际扫描时间：
-                                    <span v-text="deal.scandate"></span>
-                                </div>
-                                <div class="dealCreatedate">deal创建时间：
-                                    <span v-text="deal.dealCreatedate"></span>
-                                </div>
-                                <div class="price" v-text="'合计： ￥ '+deal.price"></div>
-                            </div>
-                            <div class="order-footer">
-                                <button class="to_delivery" @click='toDelivery(deal.delivery_company,deal.delivery_postid)'>查看物流</button>
-                                <button class="">确认收货</button>
-                                <button class="to_order_details" @click="toOrderDetails(deal.orderuuid,deal.dealuuid)">订单详情</button>
-                            </div>
-                        </div>
-                        <!-- 全部/已收货 -->
-                        <div class="order" v-for="(deal,index) in done_array">
-                            <div class="order-header">
-                                <div></div>
-                                <div class="status" v-text="deal.status"></div>
-                            </div>
-                            <div class="order-body">
-                                <div class="orderuuid">orderuuid
-                                    <span v-text="deal.orderuuid"></span>
-                                </div>
-                                <div class="dealuuid">dealuuid:
-                                    <span v-text="deal.dealuuid"></span>
-                                </div>
-                                <div class="createdate">order创建时间:
-                                    <span v-text="deal.orderCreatedate"></span>
-                                </div>
-                                <div class="station">预约扫描地址：
-                                    <span v-text="deal.station"></span>
-                                </div>
-                                <div class="appointmentdate">预约扫描时间：
-                                    <span v-text="deal.appointmentdate"></span>
-                                </div>
-                                <div class="scandate">实际扫描时间：
-                                    <span v-text="deal.scandate"></span>
-                                </div>
-                                <div class="dealCreatedate">deal创建时间：
-                                    <span v-text="deal.dealCreatedate"></span>
-                                </div>
-                                <div class="price" v-text="'合计： ￥ '+deal.price"></div>
-                            </div>
-                            <div class="order-footer">
-                                <button class="to_order_details" @click="toOrderDetails(deal.orderuuid,deal.dealuuid)">订单详情</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- 待扫描 -->
-                <div class="tabs-contents div-toscan" v-bind:class='{active:i == 1}'>
-                    <div class="failorder" v-if="isEmpty(topay_array)">
-                        2没有相关订单
-                    </div>
-                    <div v-else>
-                        <div class="order" v-for="(order,index) in toscan_array">
-                            <div class="order-header">
-                                <div></div>
-                                <div class="status" v-text="order.status"></div>
-                            </div>
-                            <div class="order-body">
-                                <div class="orderuuid">orderuuid：
-                                    <span v-text="order.orderuuid"></span>
-                                </div>
-                                <div class="createdate">订单创建时间:
-                                    <span v-text="order.createdate"></span>
-                                </div>
-                                <div class="station">预约扫描地址：
-                                    <span v-text="order.station"></span>
-                                </div>
-                                <div class="appointmentdate">预约扫描时间：
-                                    <span v-text="order.appointmentdate"></span>
-                                </div>
-                            </div>
-                            <div class="order-footer">
-                                <button class="cancelOrder" @click='cancel(order.orderuuid)'>取消预约</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- 待支付 -->
-                <div class="tabs-contents div-topay" v-bind:class='{active:i == 2}'>
-                    <div class="failorder" v-if="isEmpty(topay_array)">
-                        3没有相关订单
-                    </div>
-                    <div v-else>
-                        <div class="order" v-for="(deal,index) in topay_array">
-                            <div class="order-header">
-                                <div></div>
-                                <div class="status" v-text="deal.status"></div>
-                            </div>
-                            <div class="order-body">
-                                <div class="orderuuid">
-                                    orderuuid: <span>{{deal.orderuuid}}</span>
-                                </div>
-                                <div class="dealuuid">dealuuid:
-                                    <span v-text="deal.dealuuid"></span>
-                                </div>
-                                <div class="createdate">order创建时间:
-                                    <span v-text="deal.orderCreatedate"></span>
-                                </div>
-                                <div class="station">预约扫描地址：
-                                    <span v-text="deal.station"></span>
-                                </div>
-                                <div class="appointmentdate">预约扫描时间：
-                                    <span v-text="deal.appointmentdate"></span>
-                                </div>
-                                <div class="scandate">实际扫描时间：
-                                    <span v-text="deal.scandate"></span>
-                                </div>
-                                <div class="dealCreatedate">deal创建时间：
-                                    <span v-text="deal.dealCreatedate"></span>
-                                </div>
-                                <div class="price" v-text="'合计： ￥ '+deal.price"></div>
-                            </div>
-                            <div class="order-footer">
-                                <button class="">付款</button>
-                                <button class="to_order_details" @click="toOrderDetails(deal.orderuuid,deal.dealuuid)">订单详情</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- 生产中 -->
-                <div class="tabs-contents div-printing" v-bind:class='{active:i == 3}'>
-                    <div class="failorder" v-if="isEmpty(printing_array)">
-                        4没有相关订单
-                    </div>
-                    <div v-else>
-                        <div class="order" v-for="(deal,index) in printing_array">
-                            <div class="order-header">
-                                <div></div>
-                                <div class="status" v-text="deal.status"></div>
-                            </div>
-                            <div class="order-body">
-                                <div class="orderuuid">orderuuid
-                                    <span v-text="deal.orderuuid"></span>
-                                </div>
-                                <div class="dealuuid">dealuuid:
-                                    <span v-text="deal.dealuuid"></span>
-                                </div>
-                                <div class="createdate">order创建时间:
-                                    <span v-text="deal.orderCreatedate"></span>
-                                </div>
-                                <div class="station">预约扫描地址：
-                                    <span v-text="deal.station"></span>
-                                </div>
-                                <div class="appointmentdate">预约扫描时间：
-                                    <span v-text="deal.appointmentdate"></span>
-                                </div>
-                                <div class="scandate">实际扫描时间：
-                                    <span v-text="deal.scandate"></span>
-                                </div>
-                                <div class="dealCreatedate">deal创建时间：
-                                    <span v-text="deal.dealCreatedate"></span>
-                                </div>
-                                <div class="price" v-text="'合计： ￥ '+deal.price"></div>
-                            </div>
-                            <div class="order-footer">
-                                <button class="">催单</button>
-                                <button class="to_order_details" @click="toOrderDetails(deal.orderuuid,deal.dealuuid)">订单详情</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- 待收货 -->
-                <div class="tabs-contents div-delivering" v-bind:class='{active:i == 4}'>
-                    <div class="failorder" v-if="isEmpty(delivering_array)">
-                        5没有相关订单
-                    </div>
-                    <div v-else>
-                        <div class="order" v-for="(deal,index) in delivering_array">
-                            <div class="order-header">
-                                <div></div>
-                                <div class="status" v-text="deal.status"></div>
-                            </div>
-                            <div class="order-body">
-                                <div class="orderuuid">orderuuid
-                                    <span v-text="deal.orderuuid"></span>
-                                </div>
-                                <div class="dealuuid">dealuuid:
-                                    <span v-text="deal.dealuuid"></span>
-                                </div>
-                                <div class="createdate">order创建时间:
-                                    <span v-text="deal.orderCreatedate"></span>
-                                </div>
-                                <div class="station">预约扫描地址：
-                                    <span v-text="deal.station"></span>
-                                </div>
-                                <div class="appointmentdate">预约扫描时间：
-                                    <span v-text="deal.appointmentdate"></span>
-                                </div>
-                                <div class="scandate">实际扫描时间：
-                                    <span v-text="deal.scandate"></span>
-                                </div>
-                                <div class="dealCreatedate">deal创建时间：
-                                    <span v-text="deal.dealCreatedate"></span>
-                                </div>
-                                <div class="price" v-text="'合计： ￥ '+deal.price"></div>
-                            </div>
-                            <div class="order-footer">
-                                <button class="to_delivery" @click='toDelivery(deal.delivery_company,deal.delivery_postid)'>查看物流</button>
-                                <button class="">确认收货</button>
-                                <button class="to_order_details" @click="toOrderDetails(deal.orderuuid,deal.dealuuid)">订单详情</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <transition name="router-slid" mode="out-in">
+                    <router-view></router-view>
+                </transition>
             </div>
         </div>
-        <transition name="router-slid" mode="out-in">
-            <router-view></router-view>
-        </transition>
     </div>
 </template>
 <script>
 import goback from "@/components/goback";
 import navbar from "@/components/navbar";
+import navLeft from '@/components/nav_left'
 import {mapState,mapMutations} from 'vuex';
 import { queryOrder,cancelOrder,queryDeal } from "@/config/getData"
 import {formatDate,getStatus} from '../../config/fswear'
@@ -382,11 +389,10 @@ export default {
     };
   },
   mounted() {
-      this.getMarginLeft();
     this.initData();
   },
   components: {
-    goback
+    goback,navbar,navLeft
   },
   computed: {
       ...mapState([
@@ -538,11 +544,6 @@ export default {
         setSessionStore('delivery_postid',postid)
         this.$router.push('/delivery')
     },
-    getMarginLeft(){
-        let width = document.getElementsByClassName('tabs-head')[0].offsetWidth;
-        let marginLeft = -width/2;
-        this.marginLeft = marginLeft;
-    }
   },
   watch: {
     userInfo: function (value){
@@ -557,17 +558,28 @@ export default {
 @import '../../style/fswear';
 .orderlist-page{
     width:100%;
+    .container{
+        display: flex;
+        width: 1226px;
+        margin: 0 auto;
+        .nav-left{
+            flex:1,
+        }
+        ._content{
+            // position: relative;
+            flex:4;
+        }
+    }
+}
+.tabs-body{
     position: relative;
 }
 .tabs-head {
   width: 100%;
-  max-width: 1024px;
   height: 50px;
   background-color: #fff;
   border-top: 1px solid rgb(240, 240, 240);
-  position: fixed;
-  left: 50%;
-  top: 50px;
+  position: absolute;
   z-index: 100;
 }
 
@@ -594,12 +606,13 @@ export default {
 
 .tabs-body {
   width: 100%;
-  margin-top: 110px;
+//   margin-top: 110px;
 }
 
 .tabs-body .tabs-contents {
   width: 100%;
   display: none;
+  padding-top: 60px;
 }
 
 .tabs-body > div.active {

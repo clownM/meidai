@@ -5,24 +5,18 @@ import store from './store/';
 import FastClick from 'fastclick'
 import {routerMode} from './config/env'
 import {getCookie} from './config/utils'
+
 import VueAMap from 'vue-amap'
-// import {DatePicker,Dialog,Form,Button,Radio,Icon} from 'element-ui'
+
 import Element from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 
 import Vant from 'vant'
 import 'vant/lib/vant-css/index.css'
 
-// if ('addEventListener' in document) {
-//     document.addEventListener('DOMContentLoaded', function() {
-//         FastClick.attach(document.body);
-//     }, false);
-// }
-
 Vue.use(VueRouter);
 Vue.use(VueAMap);
 //element
-// Vue.use(DatePicker);
 // Vue.use(Dialog);
 // Vue.use(Form);
 // Vue.use(Button);
