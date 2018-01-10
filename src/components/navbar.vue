@@ -161,6 +161,10 @@ import {getCookie,delCookie,isPC} from '../config/utils'
                 }
             }
         }
+        .nav-left:hover,
+        .nav-right>div:hover{
+            cursor: pointer;
+        }
     }
     .table-islogin{
         tr{
@@ -182,9 +186,5 @@ import {getCookie,delCookie,isPC} from '../config/utils'
                 }
             }
         }
-    }
-    .nav-left:hover,
-    .nav-right>div:hover{
-        cursor: pointer;
     }
 </style>
